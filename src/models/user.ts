@@ -6,8 +6,9 @@ interface IUser {
   last_name: string;
   email: string;
   password: string;
-  member: boolean; // false == anonymous
+  membershipStatus: string;
   url?: string;
+  admin: boolean;
   comparePassword: (
     password: string,
     callback: (arg1: null | Error, arg2?: boolean) => void
@@ -19,7 +20,13 @@ const UserSchema = new Schema<IUser>({
   last_name: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
-  member: { type: Boolean, required: true },
+  membershipStatus: {
+    type: String,
+    required: true,
+    enum: ["User", "Member"],
+    default: "User",
+  },
+  admin: { type: Boolean, default: false }
 });
 
 UserSchema.virtual("url").get(function() {
