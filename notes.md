@@ -28,8 +28,8 @@ model User {
       passport js
       bcryptjs
   }
-  string membership-status {
-    see if user is logged in?
+  string member {
+    is the user a member or not?{:}
   }
   virtual url {
     return /user/:id
@@ -55,7 +55,10 @@ model Message {
 }
 </pre>
 
+
 - Setup your database on Mongo
 - Setup models
-    "@types/bcryptjs": "^2.4.2",
-    "bcryptjs": "^2.4.3",
+- Start with a sign-up form so you can get some users into your DB!
+- Don’t forget to sanitize and validate the form fields and secure the passwords with bcrypt.
+- You should add a confirmPassword field to your sign-up form and then validate it using a custom validator.
+- Read how to do that here.
