@@ -7,5 +7,6 @@ Inside the clubhouse, members can see who the author of a post is, but outside t
 # Using:
 
 - Express, Mongodb, Typescript
-- EJS, Tailwind
-- passportjs
+- Pug, Tailwind
+
+<!-- TODO: Remove output.css from gitignore -->
