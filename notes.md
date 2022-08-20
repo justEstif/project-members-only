@@ -12,53 +12,65 @@
 
 <!-- TODO: Remove output.css from gitignore -->
 
-## Directions
+# Instruction
 
-<pre>
-model User {
-  string full_name {
-    string first_name
-    string last_name
-  }
-  string email {
-    to serve as username
-    to be used on sign up and log-in
-  }
-  string password {
-      passport js
-      bcryptjs
-  }
-  string member {
-    is the user a member or not?{:}
-  }
-  virtual url {
-    return /user/:id
-  }
-. createMessage()
-}
-</pre>
+1. Database models:
+   a. how are you going to set up the db models.
 
-<pre>
-model Message {
-  string title
-  string body
-  objectID senderID {
-    sender user id
-  }
-  date timestamp
-  date timestamp_formatted {
-    user friendly using luxon
-  }
-  virtual url {
-    return /user/:id
-  }
-}
-</pre>
+   - User:
 
+     - fullNames = firstName + lastName
+     - username = email used for sign up
+     - passwords = hashed byscrypt
+     - membershipStatus: enum ["default", "club"]
+     - admin = boolean = optional
+       - if admin assign club as well
 
-- Setup your database on Mongo
-- Setup models
-- Start with a sign-up form so you can get some users into your DB!
-- Don’t forget to sanitize and validate the form fields and secure the passwords with bcrypt.
-- You should add a confirmPassword field to your sign-up form and then validate it using a custom validator.
-- Read how to do that here.
+   - Message:
+     - title
+     - text
+     - senderID
+     - timestamp
+     - timestampFormattted = user friendly luxon
+
+2. Sign up page:
+
+- Form fields: sanitized and validated using `express-validator`
+  - email:
+  - password:
+- confirm password: using <https://express-validator.github.io/docs/validation-chain-api.html>
+- assign membershipStatus
+
+3. Join the club page:
+
+- Add a page where members can “join the club” by entering a secret passcode.
+- If they enter the passcode correctly, then update their membership status.
+<!-- IDEA: Create a separate document on the db that stores the hashed password. Compare user input against that  -->
+
+4. Create a login-form using passport.js
+
+- When a user is logged in give them a link to “Create a new message” (but only show it if they’re logged in!).
+- Display all member messages on the home page, but only show the author and date of the messages to other club-members.
+
+  - if user is logged in they can post messages
+
+- You’ll need to add a way to actually mark a user as an ‘admin’ so either add another secret pass-code page, or just put an “is admin” checkbox on the sign-up form.
+  - <!-- IDEA: Have an upgrade privilages page, where the user can join the club or admin if they know the passwords -->
+- if the user is an admin allow them to delete messages
+  - <!-- NOTE: Should there be a delete message page? -->
+
+9. By this point, anyone who comes to the site should be able to see a list of all messages, with the author’s name hidden.
+
+- Users should be able to sign-up and create messages, but ONLY users that are members should be able to see the author and date of each message.
+- Finally, you should have an Admin user that is able to see everything and also has the ability to delete messages.
+- Obviously this is a simple and silly little app, but the things you are practicing (creating and authenticating users and giving users different abilities and permissions) are things that will be very useful to you!
+- When you’re satisfied with your work, deploy your project to heroku and share it below!
+
+<!-- QUESTION: should most of the control of what is able to be viewed be on the views or controller?  -->
+
+| ---------------- | --- | --- | --- | --- |
+| ---------------- | --- | --- | --- | --- |
+| read message     | X   | X   | X   | X   |
+| write message    | X   | X   | X   |     |
+| view sender      | X   | X   |     |     |
+| delete message   | X   |     |     |     |
