@@ -3,13 +3,24 @@ import endpoints from "./endpoints.config"
 import path from "path"
 import favicon from "serve-favicon"
 import mongoose from "mongoose"
+import compression from "compression"
+import helmet from "helmet"
 
 const app: Express = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 
 //Body Parser Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+app.use(compression()) // compress all paths
+
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+)
 
 // view engine setup
 app.set("views", path.join(__dirname, "..", "views"))
