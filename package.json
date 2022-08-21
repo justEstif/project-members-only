@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/app.js",
+    "format:dev": "npx -p prettier@latest -p pretty-quick pretty-quick",
     "dev": "concurrently  \"npx tsc --watch\" \"npx tailwindcss -i ./public/input.css -o ./public/output.css --watch\" \"nodemon -q dist/app.js\""
   },
   "keywords": [],
@@ -41,6 +42,8 @@
     "@types/serve-favicon": "^2.5.3",
     "concurrently": "^7.3.0",
     "nodemon": "^2.0.19",
+    "prettier": "^2.7.1",
+    "pretty-quick": "^3.1.3",
     "tailwindcss": "^3.1.8",
     "typescript": "^4.7.4"
   }
