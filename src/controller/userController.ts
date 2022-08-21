@@ -1,25 +1,83 @@
-import { RequestHandler } from "express"
+import { RequestHandler, Request, Response, NextFunction } from "express"
+import { body, validationResult } from "express-validator"
+import passport from "../modules/passport.config"
+import User from "src/models/user"
 
 // NOTE: Display all messages with user, and sort decreasing
 export const index: RequestHandler = (_, res) => {
-  res.render("messages_index")
+  res.send("messages_index")
 }
+
+export const sign_up_get: RequestHandler = (_, res) => {
+  res.render("sign_up_form")
+}
+
+export const sign_up_post = [
+  // validate and sanitize this
+  body("firstName").trim().escape().optional().isAlphanumeric(),
+  body("lastName").trim().escape().optional().isAlphanumeric(),
+  body("email").trim().escape().exists().isEmail(),
+  body("password").trim().escape().exists().isLength({ min: 4 }),
+  body("confirmPassword").custom((value, { req }) => {
+    if (value !== req.body.password) {
+      throw new Error("Passwords don't match")
+    } else {
+      return true
+    }
+  }),
+
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req)
+    const user = new User({
+      email: req.body.email,
+      password: req.body.password,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+    })
+    switch (!errors.isEmpty()) {
+      case true:
+        res.render("sign_up_form", {
+          title: "Sign Up User ",
+          errors: errors.array(),
+        })
+        return
+      default:
+        user.save((err) => {
+          if (err) {
+            return next(err)
+          } else {
+            res.redirect("/")
+          }
+        })
+    }
+  },
+]
 
 export const sign_in_get: RequestHandler = (_, res) => {
   res.render("sign_in")
 }
 
-export const sign_in_post: RequestHandler = (_, res) => {
-  res.render("sign_in")
-}
+export const sign_in_post = [
+  body("email").trim().escape().exists().isEmail(),
+  body("password").trim().escape().exists().isLength({ min: 4 }),
 
-export const sign_up_get: RequestHandler = (_, res) => {
-  res.render("sign_up")
-}
-
-export const sign_up_post: RequestHandler = (_, res) => {
-  res.render("sign_up")
-}
+  (req: Request, res: Response) => {
+    const errors = validationResult(req)
+    switch (!errors.isEmpty()) {
+      case true:
+        res.render("sign_up_form", {
+          title: "Sign Up User ",
+          errors: errors.array(),
+        })
+        return
+      default:
+        passport.authenticate("local", {
+          successRedirect: "/",
+          failureRedirect: "/",
+        })
+    }
+  },
+]
 
 export const sign_out_get: RequestHandler = (req, res, next) => {
   req.logout((err) => {
