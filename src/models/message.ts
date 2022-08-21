@@ -1,30 +1,32 @@
-import { Types, Schema, model } from "mongoose";
-import { DateTime } from "luxon";
+import { Types, Schema, model } from "mongoose"
+import { DateTime } from "luxon"
 
 interface IMessage {
-  title: string;
-  body: string;
-  user: string | Types.ObjectId;
-  timestamp: Date;
-  timestamp_formatted?: Date
-  url?: string;
+  title: string
+  body: string
+  user: string | Types.ObjectId
+  timestamp: Date
+  timestampFormatted?: Date
+  url?: string
 }
 
 const MessageSchema = new Schema<IMessage>({
   title: { type: String, required: true },
   body: { type: String, required: true },
   user: { type: Schema.Types.ObjectId, required: true, ref: "user" },
-  timestamp: { type: Date, required: true },
-});
+  timestamp: { type: Date, default: Date.now },
+})
 
 MessageSchema.virtual("url").get(function () {
-  return "/item/" + this._id;
-});
+  const message = this
+  return "/item/" + message._id
+})
 
-MessageSchema.virtual("timestamp_formatted").get(function () {
-  return DateTime.fromJSDate(this.timestamp).toLocaleString(DateTime.DATE_MED);
-});
+MessageSchema.virtual("timestampFormatted").get(function () {
+  const message = this
+  return DateTime.fromJSDate(message.timestamp).toLocaleString(DateTime.DATE_MED)
+})
 
-const Message = model<IMessage>("Message", MessageSchema);
-export { IMessage };
-export default Message;
+const Message = model<IMessage>("Message", MessageSchema)
+export { IMessage }
+export default Message
