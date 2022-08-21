@@ -7,6 +7,7 @@ import compression from "compression"
 import helmet from "helmet"
 import session from "express-session"
 import passport from "./modules/passport.config"
+import router from "./routes/msgBoardRoutes"
 
 const app: Express = express()
 const port = process.env.PORT || 5000
@@ -45,6 +46,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   res.locals.currentUser = req.user
   next()
 })
+
+app.use("/", router)
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${port}`)
