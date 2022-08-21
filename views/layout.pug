@@ -14,16 +14,18 @@ html(lang='en')
           ul(class="text-lg flex flex-col gap-4 text-nord4")
             li(class="hover:text-blue-500")
               a(href='/') Message
-            li(class="hover:text-blue-500")
-              a(href='/category/create') Become a member
-            li(class="hover:text-blue-500")
-              a(href='/item/create') Sign In
-            li(class="hover:text-blue-500")
-              a(href='/item/create') Sign Up
-            li(class="hover:text-blue-500")
-              a(href='/item/create') Sign Out
-            li(class="hover:text-blue-500")
-              a(href='/item/create') Become an Admin
+            block loggedIn
+              li(class="hover:text-blue-500")
+                a(href='/user:id/join-club') Join Club
+              li(class="hover:text-blue-500")
+                a(href='/item/create') Become Admin
+              li(class="hover:text-blue-500")
+                a(href='/user:id/sign-out') Sign Out
+            block loggedOut
+              li(class="hover:text-blue-500")
+                a(href='/sign-in') Sign In
+              li(class="hover:text-blue-500")
+                a(href='/sign-out') Sign Up
 
       div(class="mx-5")
         block content
