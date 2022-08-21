@@ -6,7 +6,7 @@ import User from "../models/user"
 // NOTE: Display all messages with user, and sort decreasing
 export const index: RequestHandler = (_, res) => {
   // res.send("messages_index")
-  res.send("NOT IMPLEMENTED: Author list")
+  res.render("NOT IMPLEMENTED: Home list")
 }
 
 export const sign_up_get: RequestHandler = (_, res) => {
@@ -64,7 +64,7 @@ export const sign_up_post = [
 ]
 
 export const sign_in_get: RequestHandler = (_, res) => {
-  res.render("sign_in_form", { title: "Sign Up" })
+  res.render("sign_in_form", { title: "Sign In" })
 }
 
 export const sign_in_post = [
@@ -81,7 +81,6 @@ export const sign_in_post = [
         })
         return
       default:
-        // passport.authenticate('local', { failureRedirect: '/', failureMessage: true }),
         passport.authenticate("local", {
           successRedirect: "/",
           failureRedirect: "/sign-in",
