@@ -7,5 +7,23 @@ html(lang='en')
     style
       include ../public/output.css
 
-  body
-    p(class="bg-green-200") Hello World
+  body(class="bg-nord0 font-mono")
+    div(class="grid grid-cols-[200px_minmax(900px,_1fr)] m-10")
+      div(class="border-r-2 border-nord3")
+        block sidebar
+          ul(class="text-lg flex flex-col gap-4 text-nord4")
+            li(class="hover:text-blue-500")
+              a(href='/') Message
+            li(class="hover:text-blue-500")
+              a(href='/category/create') Become a member
+            li(class="hover:text-blue-500")
+              a(href='/item/create') Sign In
+            li(class="hover:text-blue-500")
+              a(href='/item/create') Sign Up
+            li(class="hover:text-blue-500")
+              a(href='/item/create') Sign Out
+            li(class="hover:text-blue-500")
+              a(href='/item/create') Become an Admin
+
+      div(class="mx-5")
+        block content
