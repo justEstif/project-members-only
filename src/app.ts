@@ -8,6 +8,7 @@ import helmet from "helmet"
 import session from "express-session"
 import passport from "./modules/passport.config"
 import router from "./routes/msgBoardRoutes"
+import sessionConfig from "./modules/session.config"
 
 const app: Express = express()
 const port = process.env.PORT || 5000
@@ -37,7 +38,7 @@ app.use((req, res, next) => {
 })
 
 // Passport Middleware
-app.use(session({ secret: endpoints.SESSION_SECRET, resave: false, saveUninitialized: true }))
+app.use(session(sessionConfig))
 app.use(passport.initialize())
 app.use(passport.session())
 
