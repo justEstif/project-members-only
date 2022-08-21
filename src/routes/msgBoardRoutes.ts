@@ -21,7 +21,7 @@ router.post("/message:id/update", message_controller.message_update_post)
 // NOTE: User route
 
 // to sign-out (if signed in)
-router.get("/user:id/sign-out", user_controller.sign_out_get)
+router.get("/sign-out", user_controller.sign_out_get)
 
 // to join club (if signed in)
 router.get("/user:id/join-club", user_controller.join_club_get)
