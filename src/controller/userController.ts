@@ -1,7 +1,7 @@
 import { RequestHandler, Request, Response, NextFunction } from "express"
 import { body, validationResult } from "express-validator"
 import passport from "../modules/passport.config"
-import User from "src/models/user"
+import User from "../models/user"
 
 // NOTE: Display all messages with user, and sort decreasing
 export const index: RequestHandler = (_, res) => {
