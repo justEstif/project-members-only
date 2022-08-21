@@ -21,8 +21,14 @@ export const sign_up_post: RequestHandler = (_, res) => {
   res.render("sign_up")
 }
 
-export const sign_out_get: RequestHandler = (_, res) => {
-  res.render("sign_out")
+export const sign_out_get: RequestHandler = (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err)
+    } else {
+      res.redirect("/")
+    }
+  })
 }
 
 export const join_club_get: RequestHandler = (_, res) => {
