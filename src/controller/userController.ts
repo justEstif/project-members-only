@@ -9,7 +9,7 @@ export const index: RequestHandler = (_, res) => {
 }
 
 export const sign_up_get: RequestHandler = (_, res) => {
-  res.render("sign_up_form")
+  res.render("sign_up_form", { title: "Sign Up" })
 }
 
 export const sign_up_post = [
@@ -52,24 +52,21 @@ export const sign_up_post = [
     switch (!errors.isEmpty()) {
       case true:
         res.render("sign_up_form", {
-          title: "Sign Up User ",
+          title: "Sign Up",
           errors: errors.array(),
         })
         return
       default:
         user.save((err) => {
-          if (err) {
-            return next(err)
-          } else {
-            res.redirect("/")
-          }
+          if (err) return next(err)
+          res.redirect("/")
         })
     }
   },
 ]
 
 export const sign_in_get: RequestHandler = (_, res) => {
-  res.render("sign_in")
+  res.render("sign_in_form")
 }
 
 export const sign_in_post = [
@@ -80,15 +77,15 @@ export const sign_in_post = [
     const errors = validationResult(req)
     switch (!errors.isEmpty()) {
       case true:
-        res.render("sign_up_form", {
-          title: "Sign Up User ",
+        res.render("sign_in_form", {
+          title: "Sign In User ",
           errors: errors.array(),
         })
         return
       default:
         passport.authenticate("local", {
           successRedirect: "/",
-          failureRedirect: "/",
+          failureRedirect: "/sign_in",
         })
     }
   },
