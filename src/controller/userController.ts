@@ -13,10 +13,25 @@ export const sign_up_get: RequestHandler = (_, res) => {
 }
 
 export const sign_up_post = [
-  // validate and sanitize this
+  // Check if the email doesn't exist on the db
   body("firstName").trim().escape().optional().isAlphanumeric(),
   body("lastName").trim().escape().optional().isAlphanumeric(),
-  body("email").trim().escape().exists().isEmail(),
+  body("email")
+    .trim()
+    .escape()
+    .exists()
+    .isEmail()
+    .custom((value) => {
+      User.findOne({ email: value }).exec((err, emailExists) => {
+        if (err) {
+          throw err
+        } else if (emailExists) {
+          throw new Error("User with email exists")
+        } else {
+          return true
+        }
+      })
+    }),
   body("password").trim().escape().exists().isLength({ min: 4 }),
   body("confirmPassword").custom((value, { req }) => {
     if (value !== req.body.password) {
