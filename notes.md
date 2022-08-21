@@ -12,14 +12,16 @@
 
 <!-- TODO: Remove output.css from gitignore -->
 
-# Instruction
+## Instruction
 
 1. Database models:
    a. how are you going to set up the db models.
 
    - User:
 
-     - fullNames = firstName + lastName
+     - firstName
+     - lastName
+     - fullName = firstName + lastName
      - username = email used for sign up
      - passwords = hashed byscrypt
      - membershipStatus: enum ["default", "club"]
@@ -36,8 +38,10 @@
 2. Sign up page:
 
 - Form fields: sanitized and validated using `express-validator`
-  - email:
-  - password:
+  - firstName
+  - lastName
+  - email
+  - password
 - confirm password: using <https://express-validator.github.io/docs/validation-chain-api.html>
 - assign membershipStatus
 
@@ -59,7 +63,7 @@
 - if the user is an admin allow them to delete messages
   - <!-- NOTE: Should there be a delete message page? -->
 
-9. By this point, anyone who comes to the site should be able to see a list of all messages, with the author’s name hidden.
+5. By this point, anyone who comes to the site should be able to see a list of all messages, with the author’s name hidden.
 
 - Users should be able to sign-up and create messages, but ONLY users that are members should be able to see the author and date of each message.
 - Finally, you should have an Admin user that is able to see everything and also has the ability to delete messages.
@@ -74,3 +78,41 @@
 | write message    | X   | X   | X   |     |
 | view sender      | X   | X   |     |     |
 | delete message   | X   |     |     |     |
+
+## Routes
+
+// GET request for one message.
+router.get("/message/:id", message_controller.message_detail)
+
+// Only the sender or an admin can delete a message
+router.get("/message/:id/delete", message_controller.message_delete_get)
+router.post("/message/:id/delete", message_controller.message_delete_post)
+
+// Only the sender of the message can update the message
+router.get("/message:id/update", message_controller.message_update_get)
+router.post("/message:id/update", message_controller.message_update_post)
+
+// NOTE: Only show if not logged in, else redirect to home(or do nothing)
+
+// to sign up as member
+router.get("/sign-up", user_controller.user_sign_up_get)
+router.get("/sign-up", user_controller.user_sign_up_post)
+
+// to login as a user
+router.get("/sign-in", user_controller.user_sign_in_get)
+router.get("/sign-in", user_controller.user_sign_in_post)
+
+// NOTE: Only show if logged in, else redirect to home(or do nothing)
+
+// to sign-out -> no post needed
+router.get("/sign-out", user_controller.user_sign_out_get)
+
+// to join club
+router.get("/join-club", user_controller.user_join_club_get)
+router.get("/join-club", user_controller.user_join_club_post)
+
+// NOTE: Only show if club member
+
+// to become admin
+router.get("/be-admin", user_controller.be_admin_get)
+router.post("/be-admin", user_controller.be_admin_post)
