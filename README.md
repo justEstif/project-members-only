@@ -11,4 +11,3 @@
 - Express, Mongodb, Typescript
 - EJS, Tailwind
 - passportjs
-
