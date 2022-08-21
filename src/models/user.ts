@@ -19,7 +19,6 @@ const UserSchema = new Schema<IUser>({
   password: { type: String, required: true },
   membershipStatus: {
     type: String,
-    required: true,
     enum: ["User", "Member"],
     default: "User",
   },
