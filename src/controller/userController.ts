@@ -13,8 +13,8 @@ export const sign_up_get: RequestHandler = (_, res) => {
 }
 
 export const sign_up_post = [
-  body("firstName").trim().escape().optional(),
-  body("lastName").trim().escape().optional(),
+  body("firstName").trim().escape(),
+  body("lastName").trim().escape(),
   body("email")
     .trim()
     .escape()
@@ -38,27 +38,25 @@ export const sign_up_post = [
     .withMessage("Passwords don't match."),
 
   (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req)
     const user = new User({
       email: req.body.email,
       password: req.body.password,
-      firstName: req.body.firstName || "",
-      lastName: req.body.lastName || "",
+      ... ((req.body.firstName !== "") && { firstName: req.body.firstName }),
+      ... ((req.body.lastName !== "") && { lastName: req.body.lastName }),
     })
+    const errors = validationResult(req)
     switch (!errors.isEmpty()) {
       case true:
         res.render("sign_up_form", {
           title: "Sign Up",
           errors: errors.array(),
+          user: user,
         })
         return
       default:
         user.save((err) => {
           if (err) return next(err)
-        })
-        req.login(user, (err) => {
-          if (err) return next(err)
-          res.redirect("/")
+          else res.redirect("/")
         })
     }
   },
@@ -97,8 +95,8 @@ export const sign_in_post = [
         })
         return
       default:
-        passport.authenticate('local', { failureRedirect: '/sign-in' }),
-          function(_: Request, res: Response) {
+        passport.authenticate("local", { failureRedirect: "/sign-in" }),
+          function(_: Request, __: Response) {
             console.log("Success")
             // res.redirect('/')
           }
