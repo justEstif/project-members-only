@@ -1,4 +1,4 @@
-import express, { Express, Request, Response, NextFunction } from "express"
+import express, { Express } from "express"
 import endpoints from "./endpoints.config"
 import path from "path"
 import favicon from "serve-favicon"
@@ -8,8 +8,8 @@ import helmet from "helmet"
 import session from "express-session"
 import passport from "passport"
 import router from "./routes/msgBoardRoutes"
-import sessionConfig from "./modules/session.config"
-import localStrategy from "./modules/strategy.config"
+import MongoStore from "connect-mongo"
+import localStrategy from "./modules/passport.config"
 import User, { IUser } from "./models/user"
 
 const app: Express = express()
@@ -21,10 +21,14 @@ connection.on("error", console.error.bind(console, "mongo connection error"))
 app.set("views", path.join(__dirname, "..", "views"))
 app.set("view engine", "pug")
 
-// Body parser
+// Body Parser
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
+// Favicon server middleware
+app.use(favicon(path.join(__dirname, "..", "public", "favicon.ico")))
+
+// Compression and Helmet setup
 app.use(compression())
 app.use(
   helmet({
@@ -33,13 +37,8 @@ app.use(
   })
 )
 
-// simplifing how we access user variable
-app.use((req, res, next) => {
-  res.locals.currentUser = req.user
-  next()
-})
-
 passport.use(localStrategy)
+
 // Creates cookies to confirm the user is currently logged in
 passport.serializeUser((user, done) => {
   interface IExpressUser extends Express.User {
@@ -70,12 +69,6 @@ app.use(
 // Passport Middleware
 app.use(passport.initialize())
 app.use(passport.session())
-
-app.use(favicon(path.join(__dirname, "..", "public", "favicon.ico")))
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.locals.currentUser = req.user
-  next()
-})
 
 app.use("/", router)
 
