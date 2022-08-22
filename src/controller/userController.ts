@@ -21,25 +21,22 @@ export const sign_up_post = [
     .escape()
     .exists()
     .withMessage("Email is required")
+    .normalizeEmail()
     .isEmail()
     .custom(async (value) => {
       const user = await User.findOne({ email: value })
       if (user) {
         return Promise.reject("E-mail already in use")
       }
-      return
+      return true
     }),
-  body("password").trim().escape().exists().withMessage("Password is required").isLength({ min: 4 }),
+  body("password").trim().escape().exists().withMessage("Password is required"),
   body("confirmPassword")
     .trim()
     .escape()
     .exists()
-    .withMessage("Passwords don't match")
-    .isLength({ min: 4 })
-    .custom((value, { req }) => {
-      return value !== req.body.password ? false : true
-    })
-    .withMessage("Passwords don't match"),
+    .custom((value, { req }) => req.body.password === value)
+    .withMessage("Passwords don't match."),
 
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
@@ -58,6 +55,9 @@ export const sign_up_post = [
         return
       default:
         user.save((err) => {
+          if (err) return next(err)
+        })
+        req.login(user, (err) => {
           if (err) return next(err)
           res.redirect("/")
         })
