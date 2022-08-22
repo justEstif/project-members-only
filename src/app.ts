@@ -6,9 +6,11 @@ import { connect, connection } from "mongoose"
 import compression from "compression"
 import helmet from "helmet"
 import session from "express-session"
-import passport from "./modules/passport.config"
+import passport from "passport"
 import router from "./routes/msgBoardRoutes"
 import sessionConfig from "./modules/session.config"
+import localStrategy from "./modules/strategy.config"
+import User, { IUser } from "./models/user"
 
 const app: Express = express()
 const port = process.env.PORT || 5000
@@ -35,6 +37,23 @@ app.use(
 app.use((req, res, next) => {
   res.locals.currentUser = req.user
   next()
+})
+
+passport.use(localStrategy)
+// Creates cookies to confirm the user is currently logged in
+passport.serializeUser((user, done) => {
+  interface IExpressUser extends Express.User {
+    id: string
+  }
+  const eUser: IExpressUser = user as IExpressUser
+  done(null, eUser.id)
+})
+
+// Delete cookies when the user leaves
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err: Error, user: IUser) => {
+    done(err, user)
+  })
 })
 
 // Passport Middleware
