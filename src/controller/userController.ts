@@ -1,11 +1,10 @@
 import { RequestHandler, Request, Response, NextFunction } from "express"
 import { body, validationResult } from "express-validator"
-import passport from "../modules/passport.config"
+import passport from "passport"
 import User from "../models/user"
 
 // NOTE: Display all messages with user, and sort decreasing
 export const index: RequestHandler = (_, res) => {
-  // res.send("messages_index")
   res.render("NOT IMPLEMENTED: Home list")
 }
 
@@ -65,15 +64,30 @@ export const sign_up_post = [
   },
 ]
 
-export const sign_in_get: RequestHandler = (_, res) => {
-  res.render("sign_in_form", { title: "Sign In" })
+export const sign_in_get: RequestHandler = (req, res) => {
+  if (req.user) {
+    res.redirect("/")
+  } else {
+    res.render("sign_in_form", { title: "Sign In" })
+  }
 }
 
 export const sign_in_post = [
-  body("email").trim().escape().exists().withMessage("Email is required").isEmail(),
-  body("password").trim().escape().exists().withMessage("Password is required").isLength({ min: 4 }),
+  body("email")
+    .trim()
+    .escape()
+    .exists()
+    .withMessage("Email is required")
+    .normalizeEmail()
+    .isEmail()
+    .withMessage("Invalid Email"),
+  body("password").trim().escape().exists().withMessage("Password is required"),
 
   (req: Request, res: Response, _: NextFunction) => {
+    if (req.user) {
+      // TODO: If the user is logged is redirect to the home page
+      res.redirect("/")
+    }
     const errors = validationResult(req)
     switch (!errors.isEmpty()) {
       case true:
@@ -83,10 +97,16 @@ export const sign_in_post = [
         })
         return
       default:
-        passport.authenticate("local", {
-          successRedirect: "/",
-          failureRedirect: "/sign-in",
-        })
+        passport.authenticate('local', { failureRedirect: '/sign-in' }),
+          function(_: Request, res: Response) {
+            console.log("Success")
+            // res.redirect('/')
+          }
+      // BUG: Fix the passport authentication
+      // passport.authenticate("local", {
+      //   successRedirect: "/",
+      //   failureRedirect: "/sign-in",
+      // })
     }
   },
 ]
