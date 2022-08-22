@@ -1,7 +1,8 @@
 import User from "../models/user"
 import { Strategy } from "passport-local"
 
-const localStrategy = new Strategy((username, password, done) => {
+// Make sure it uses the email field as the username
+const localStrategy = new Strategy({ usernameField: "email" }, (username, password, done) => {
   User.findOne({ username: username }).exec((err, user) => {
     if (err) {
       return done(err)

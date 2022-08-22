@@ -13,8 +13,8 @@ export const sign_up_get: RequestHandler = (_, res) => {
 }
 
 export const sign_up_post = [
-  body("firstName").trim().escape().optional(),
-  body("lastName").trim().escape().optional(),
+  body("firstName").trim().escape(),
+  body("lastName").trim().escape(),
   body("email")
     .trim()
     .escape()
@@ -38,38 +38,37 @@ export const sign_up_post = [
     .withMessage("Passwords don't match."),
 
   (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req)
     const user = new User({
       email: req.body.email,
       password: req.body.password,
-      firstName: req.body.firstName || "",
-      lastName: req.body.lastName || "",
+      ...(req.body.firstName !== "" && { firstName: req.body.firstName }),
+      ...(req.body.lastName !== "" && { lastName: req.body.lastName }),
     })
+    const errors = validationResult(req)
     switch (!errors.isEmpty()) {
       case true:
         res.render("sign_up_form", {
           title: "Sign Up",
           errors: errors.array(),
+          user: user,
         })
         return
       default:
         user.save((err) => {
           if (err) return next(err)
-        })
-        req.login(user, (err) => {
-          if (err) return next(err)
-          res.redirect("/")
+          else {
+            req.login(user, (err) => {
+              if (err) return next(err)
+              else res.redirect("/")
+            })
+          }
         })
     }
   },
 ]
 
 export const sign_in_get: RequestHandler = (req, res) => {
-  if (req.user) {
-    res.redirect("/")
-  } else {
-    res.render("sign_in_form", { title: "Sign In" })
-  }
+  req.isAuthenticated() ? res.redirect("/") : res.render("sign_in_form", { title: "Sign In" })
 }
 
 export const sign_in_post = [
@@ -84,10 +83,6 @@ export const sign_in_post = [
   body("password").trim().escape().exists().withMessage("Password is required"),
 
   (req: Request, res: Response, _: NextFunction) => {
-    if (req.user) {
-      // TODO: If the user is logged is redirect to the home page
-      res.redirect("/")
-    }
     const errors = validationResult(req)
     switch (!errors.isEmpty()) {
       case true:
@@ -97,16 +92,10 @@ export const sign_in_post = [
         })
         return
       default:
-        passport.authenticate('local', { failureRedirect: '/sign-in' }),
-          function(_: Request, res: Response) {
-            console.log("Success")
-            // res.redirect('/')
-          }
-      // BUG: Fix the passport authentication
-      // passport.authenticate("local", {
-      //   successRedirect: "/",
-      //   failureRedirect: "/sign-in",
-      // })
+        passport.authenticate("local", {
+          successRedirect: "/",
+          failureRedirect: "/sign-in",
+        })
     }
   },
 ]

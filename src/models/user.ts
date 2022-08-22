@@ -13,8 +13,8 @@ interface IUser {
 }
 
 const UserSchema = new Schema<IUser>({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  firstName: { type: String, required: false },
+  lastName: { type: String, required: false },
   email: { type: String, required: true },
   password: { type: String, required: true },
   membershipStatus: {
@@ -52,13 +52,14 @@ UserSchema.pre("save", function (next) {
   } else return next()
 })
 
-UserSchema.methods = {
-  comparePassword: function (password: string, callback: (arg1: null | Error, arg2?: boolean) => void) {
-    bcryptjs.compare(password, this.password, function (error, isMatch) {
-      if (error) return callback(error)
-      else callback(null, isMatch)
-    })
-  },
+UserSchema.methods.comparePassword = function (password: string, cb: (arg1: null | Error, arg2?: boolean) => void) {
+  bcryptjs.compare(password, this.password, function (error, isMatch) {
+    if (error) {
+      return cb(error)
+    } else {
+      cb(null, isMatch)
+    }
+  })
 }
 
 const User = model<IUser>("User", UserSchema)
