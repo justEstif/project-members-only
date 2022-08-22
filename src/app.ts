@@ -56,8 +56,18 @@ passport.deserializeUser((id, done) => {
   })
 })
 
+// Session Setup
+app.use(
+  session({
+    secret: endpoints.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: endpoints.MONGO_URL }),
+    cookie: { maxAge: 1000 * 30 },
+  })
+)
+
 // Passport Middleware
-app.use(session(sessionConfig))
 app.use(passport.initialize())
 app.use(passport.session())
 
