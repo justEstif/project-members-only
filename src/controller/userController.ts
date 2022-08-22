@@ -14,7 +14,6 @@ export const sign_up_get: RequestHandler = (_, res) => {
 }
 
 export const sign_up_post = [
-  // Check if the email doesn't exist on the db
   body("firstName").trim().escape().optional(),
   body("lastName").trim().escape().optional(),
   body("email")
@@ -23,10 +22,13 @@ export const sign_up_post = [
     .exists()
     .withMessage("Email is required")
     .isEmail()
-    .custom((value) => {
-      User.findOne({ email: value }).exec((err, emailExists) => (emailExists || err ? false : true))
-    })
-    .withMessage("User with email already exists"),
+    .custom(async (value) => {
+      const user = await User.findOne({ email: value })
+      if (user) {
+        return Promise.reject("E-mail already in use")
+      }
+      return
+    }),
   body("password").trim().escape().exists().withMessage("Password is required").isLength({ min: 4 }),
   body("confirmPassword")
     .trim()
@@ -44,8 +46,8 @@ export const sign_up_post = [
     const user = new User({
       email: req.body.email,
       password: req.body.password,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      firstName: req.body.firstName || "",
+      lastName: req.body.lastName || "",
     })
     switch (!errors.isEmpty()) {
       case true:
