@@ -95,3 +95,38 @@ app.post(
   })
 )
 ```
+
+## Join Club Page
+
+```js
+passport.authenticate("local", function (err, user) {
+  if (err) res.redirect("/")
+  else {
+    if (!user) {
+      res.redirect("/sign-in")
+      res.render("sign_in_form", {
+        title: "Sign In",
+        errors: ["User doesn't exist"],
+      })
+    } else {
+      req.login(user, function (err) {
+        if (err) next(err)
+        else {
+          res.redirect("/")
+          // TODO: TO BE REMOVED
+          console.log(`user ${user}`)
+        }
+      })
+    }
+  }
+})(req, res)
+```
+
+```js
+req.session.destroy((err) => {
+  if (err) {
+    return next(err)
+  } else {
+  }
+})
+```

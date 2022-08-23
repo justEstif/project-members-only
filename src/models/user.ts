@@ -7,8 +7,8 @@ interface IUser {
   email: string
   password: string
   membershipStatus: string
-  url?: string
   admin: boolean
+  url?: string
   comparePassword: (password: string, callback: (arg1: null | Error, arg2?: boolean) => void) => boolean
 }
 

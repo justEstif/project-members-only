@@ -44,6 +44,7 @@ export const sign_up_post = [
       ...(req.body.firstName !== "" && { firstName: req.body.firstName }),
       ...(req.body.lastName !== "" && { lastName: req.body.lastName }),
     })
+
     const errors = validationResult(req)
     switch (!errors.isEmpty()) {
       case true:
@@ -57,6 +58,7 @@ export const sign_up_post = [
         user.save((err) => {
           if (err) return next(err)
           else {
+            // login user after signing up
             req.login(user, (err) => {
               if (err) return next(err)
               else res.redirect("/")
@@ -95,7 +97,7 @@ export const sign_in_post = [
         passport.authenticate("local", {
           successRedirect: "/",
           failureRedirect: "/sign-in",
-        })
+        })(req, res)
     }
   },
 ]
@@ -110,12 +112,12 @@ export const sign_out_get: RequestHandler = (req, res, next) => {
   })
 }
 
-export const join_club_get: RequestHandler = (_, res) => {
-  res.render("join_club")
+export const join_club_get: RequestHandler = (req, res) => {
+  !req.isAuthenticated() ? res.redirect("/") : res.render("join_up_form", { title: "Become a club member" })
 }
 
 export const join_club_post: RequestHandler = (_, res) => {
-  res.render("join_club")
+  res.render("join_up_form", { title: "Become a club member" })
 }
 
 export const be_admin_get: RequestHandler = (_, res) => {
@@ -125,3 +127,4 @@ export const be_admin_get: RequestHandler = (_, res) => {
 export const be_admin_post: RequestHandler = (_, res) => {
   res.render("be_admin")
 }
+// TODO: handle protected routes by checking if the user isAuthenticated
