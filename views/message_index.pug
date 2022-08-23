@@ -1,0 +1,31 @@
+extends layout
+
+block loggedOut
+
+block content
+  div(class="flex flex-col gap-5")
+    h1(class="text-nord15 text-5xl")= title
+
+  if error
+    p Error getting content.
+  else
+    if messages
+      ul(class="mt-4 text-red-500 flex flex-col gap-5")
+        for message in messages
+          li= message
+
+    if currentUser
+      form(method='POST' action='' autocomplete="off")
+        div.form-group(class="flex max-w-lg w-full justify-between gap-5")
+          label(for='message' class="capitalize text-lg ") Enter message:
+          input#message.form-control(type='text' required placeholder='Message' class="text-right px-3  bg-nord0 border border-nord6" name='message' value="" )
+
+        input(type="hidden" name="userID" id="userID" value=currentUser._id)
+        button.btn.btn-primary(type='submit' class="px-6 py-2.5 bg-nord3 hover:bg-nord10 text-white font-medium text-xs leading-tight") Submit
+
+  if errors
+    ul(class="mt-4 text-red-500 flex flex-col gap-5")
+      for error in errors
+        li!= error.msg
+
+
