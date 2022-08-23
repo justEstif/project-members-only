@@ -24,12 +24,12 @@ router.post("/message:id/update", message_controller.message_update_post)
 router.get("/sign-out", user_controller.sign_out_get)
 
 // to join club (if signed in)
-router.get("/user:id/join-club", user_controller.join_club_get)
-router.post("/user:id/join-club", user_controller.join_club_post)
+router.get("/join-club", user_controller.join_club_get)
+router.post("/join-club", user_controller.join_club_post)
 
 // to become admin (if a club member)
-router.get("/user:id/be-admin", user_controller.be_admin_get)
-router.post("/user:id/be-admin", user_controller.be_admin_post)
+router.get("/be-admin", user_controller.be_admin_get)
+router.post("/be-admin", user_controller.be_admin_post)
 
 // to sign up as member (if not logged in)
 router.get("/sign-up", user_controller.sign_up_get)
