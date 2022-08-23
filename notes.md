@@ -52,6 +52,7 @@
    - Add a page where members can “join the club” by entering a secret passcode.
    - If they enter the passcode correctly, then update their membership status.
    <!-- IDEA: Create a separate document on the db that stores the hashed password. Compare user input against that  -->
+   - Instead I use the env to store the value and just check the value against that.
 
 4. Create a login-form using passport.js
 
@@ -96,37 +97,11 @@ app.post(
 )
 ```
 
-## Join Club Page
+## Writing Messages
 
-```js
-passport.authenticate("local", function (err, user) {
-  if (err) res.redirect("/")
-  else {
-    if (!user) {
-      res.redirect("/sign-in")
-      res.render("sign_in_form", {
-        title: "Sign In",
-        errors: ["User doesn't exist"],
-      })
-    } else {
-      req.login(user, function (err) {
-        if (err) next(err)
-        else {
-          res.redirect("/")
-          // TODO: TO BE REMOVED
-          console.log(`user ${user}`)
-        }
-      })
-    }
-  }
-})(req, res)
-```
+1. Create the home page
+2. Create the write messages page
 
-```js
-req.session.destroy((err) => {
-  if (err) {
-    return next(err)
-  } else {
-  }
-})
-```
+- could we have home page have an input section at the bottom, that
+- the home page(messages) get all the messages and shows them
+- the home page has a form at the bottom, and the user can write a message in there and the post request is to add that message to db, and rerender the page

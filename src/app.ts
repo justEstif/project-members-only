@@ -17,6 +17,7 @@ const port = process.env.PORT || 5000
 connect(endpoints.MONGO_URL)
 connection.on("error", console.error.bind(console, "mongo connection error"))
 
+// View
 app.set("views", path.join(__dirname, "..", "views"))
 app.set("view engine", "pug")
 
@@ -67,7 +68,7 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
-// access the user as currentUser in pug
+// access the user as currentUser in views
 app.use(function (req, res, next) {
   res.locals.currentUser = req.user
   next()
