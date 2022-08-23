@@ -8,8 +8,8 @@ export const index: RequestHandler = (_, res) => {
   res.render("NOT IMPLEMENTED: Home list")
 }
 
-export const sign_up_get: RequestHandler = (_, res) => {
-  res.render("sign_up_form", { title: "Sign Up" })
+export const sign_up_get: RequestHandler = (req, res) => {
+  req.isAuthenticated() ? res.redirect("/") : res.render("sign_up_form", { title: "Sign Up" })
 }
 
 export const sign_up_post = [
@@ -103,28 +103,40 @@ export const sign_in_post = [
 ]
 
 export const sign_out_get: RequestHandler = (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err)
-    } else {
-      res.redirect("/")
-    }
-  })
+  req.isAuthenticated()
+    ? req.logout((err) => {
+        if (err) {
+          return next(err)
+        } else {
+          res.redirect("/")
+        }
+      })
+    : res.redirect("/")
 }
 
 export const join_club_get: RequestHandler = (req, res) => {
-  !req.isAuthenticated() ? res.redirect("/") : res.render("join_up_form", { title: "Become a club member" })
+  req.isAuthenticated() ? res.render("join_up_form", { title: "Become a club member" }) : res.redirect("/")
 }
 
-export const join_club_post: RequestHandler = (_, res) => {
-  res.render("join_up_form", { title: "Become a club member" })
-}
+export const join_club_post = [
+  body('password').trim().escape().exists(),
+  (req: Request, res: Response, _: NextFunction) => {
+    const errors = validationResult(req)
+    switch (!errors.isEmpty()) {
+      case true:
+        res.render("join_up_form", { title: "Become a club member", errors: errors.array() })
+        return
+      default:
+        // TODO: Handle the join club
+        console.log(req.body.password)
+        console.log(req.body.userID)
+    }}
+]
 
-export const be_admin_get: RequestHandler = (_, res) => {
-  res.render("be_admin")
+export const be_admin_get: RequestHandler = (req, res) => {
+  req.isAuthenticated() ? res.render("be_admin") : res.redirect("/")
 }
 
 export const be_admin_post: RequestHandler = (_, res) => {
   res.render("be_admin")
 }
-// TODO: handle protected routes by checking if the user isAuthenticated
