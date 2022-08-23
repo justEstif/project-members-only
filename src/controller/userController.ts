@@ -2,6 +2,7 @@ import { RequestHandler, Request, Response, NextFunction } from "express"
 import { body, validationResult } from "express-validator"
 import passport from "passport"
 import User from "../models/user"
+import endpoints from "../endpoints"
 
 // NOTE: Display all messages with user, and sort decreasing
 export const index: RequestHandler = (_, res) => {
@@ -105,11 +106,8 @@ export const sign_in_post = [
 export const sign_out_get: RequestHandler = (req, res, next) => {
   req.isAuthenticated()
     ? req.logout((err) => {
-        if (err) {
-          return next(err)
-        } else {
-          res.redirect("/")
-        }
+        if (err) return next(err)
+        else res.redirect("/")
       })
     : res.redirect("/")
 }
@@ -119,18 +117,25 @@ export const join_club_get: RequestHandler = (req, res) => {
 }
 
 export const join_club_post = [
-  body('password').trim().escape().exists(),
-  (req: Request, res: Response, _: NextFunction) => {
+  body("password")
+    .trim()
+    .escape()
+    .exists()
+    .custom((value) => endpoints.CLUB_PASSWORD === value)
+    .withMessage("Password doesn't match"),
+  (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req)
     switch (!errors.isEmpty()) {
       case true:
         res.render("join_up_form", { title: "Become a club member", errors: errors.array() })
         return
       default:
-        // TODO: Handle the join club
-        console.log(req.body.password)
-        console.log(req.body.userID)
-    }}
+        User.findByIdAndUpdate(req.body.userID, { $set: { membershipStatus: "Member" } }, { new: true }, (err) => {
+          if (err) next(err)
+          else res.redirect("/")
+        })
+    }
+  },
 ]
 
 export const be_admin_get: RequestHandler = (req, res) => {
