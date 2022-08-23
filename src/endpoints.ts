@@ -10,4 +10,5 @@ export default {
   DELETE_PASSWORD: process.env.DELETE_PASSWORD,
   SESSION_SECRET: process.env.SESSION_SECRET4 || "secret",
   CLUB_PASSWORD: process.env.CLUB_PASSWORD,
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
 }
