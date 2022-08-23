@@ -1,9 +1,9 @@
 import { RequestHandler } from "express"
 // import User from "../models/user"
 
-// NOTE: Display all messages with user, and sort decreasing
+// NOTE: HOMEPAGE
 export const index: RequestHandler = (_, res) => {
-  res.send("NOT IMPLEMENTED: Home list")
+  res.render("message_index", { title: "Sign Up" })
 }
 
 export const message_detail: RequestHandler = (_, res) => {

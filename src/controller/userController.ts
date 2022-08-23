@@ -139,7 +139,7 @@ export const join_club_post = [
 ]
 
 export const be_admin_get: RequestHandler = (req, res) => {
-  req.isAuthenticated() ? res.render("admin_form") : res.redirect("/")
+  req.isAuthenticated() ? res.render("admin_form", { title: "Apply for Admin Postion"}) : res.redirect("/")
 }
 
 export const be_admin_post = [
@@ -153,10 +153,10 @@ export const be_admin_post = [
     const errors = validationResult(req)
     switch (!errors.isEmpty()) {
       case true:
-        res.render("admin_form", { title: "Apply for admin", errors: errors.array() })
+        res.render("admin_form", { title: "Apply for Admin Postion", errors: errors.array() })
         return
       default:
-        User.findByIdAndUpdate(req.body.userID, { $set: { membershipStatus: "Member", admin: true } }, { new: true }, (err) => {
+        User.findByIdAndUpdate(req.body.userID, { $set: { membershipStatus: "Member", admin: true } }, (err) => {
           if (err) next(err)
           else res.redirect("/")
         })
