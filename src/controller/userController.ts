@@ -139,9 +139,27 @@ export const join_club_post = [
 ]
 
 export const be_admin_get: RequestHandler = (req, res) => {
-  req.isAuthenticated() ? res.render("be_admin") : res.redirect("/")
+  req.isAuthenticated() ? res.render("admin_form") : res.redirect("/")
 }
 
-export const be_admin_post: RequestHandler = (_, res) => {
-  res.render("be_admin")
-}
+export const be_admin_post = [
+  body("password")
+    .trim()
+    .escape()
+    .exists()
+    .custom((value) => endpoints.ADMIN_PASSWORD === value)
+    .withMessage("Password doesn't match"),
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req)
+    switch (!errors.isEmpty()) {
+      case true:
+        res.render("admin_form", { title: "Apply for admin", errors: errors.array() })
+        return
+      default:
+        User.findByIdAndUpdate(req.body.userID, { $set: { membershipStatus: "Member", admin: true } }, { new: true }, (err) => {
+          if (err) next(err)
+          else res.redirect("/")
+        })
+    }
+  },
+]
