@@ -8,7 +8,6 @@ import helmet from "helmet"
 import session from "express-session"
 import passport from "passport"
 import router from "./routes/msgBoardRoutes"
-import MongoStore from "connect-mongo"
 import localStrategy from "./modules/passport.config"
 import User, { IUser } from "./models/user"
 
@@ -61,8 +60,6 @@ app.use(
     secret: endpoints.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: endpoints.MONGO_URL }),
-    cookie: { maxAge: 1000 },
   })
 )
 
