@@ -12,12 +12,12 @@ import User, { IUser } from "./models/user"
 import endpoints from "./endpoints"
 
 const app: Express = express()
-const port = process.env.PORT || 5000
 
+// Mongoose setup
 connect(endpoints.MONGO_URL)
 connection.on("error", console.error.bind(console, "mongo connection error"))
 
-// View
+// Setup View
 app.set("views", path.join(__dirname, "..", "views"))
 app.set("view engine", "pug")
 
@@ -37,6 +37,7 @@ app.use(
   })
 )
 
+// Passport
 passport.use(localStrategy)
 
 // Creates cookies to confirm the user is currently logged in
@@ -69,13 +70,14 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // access the user as currentUser in views
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   res.locals.currentUser = req.user
   next()
 })
 
 app.use("/", router)
 
+const port = endpoints.PORT
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at https://localhost:${port}`)
 })
