@@ -1,5 +1,4 @@
 import express, { Express } from "express"
-import endpoints from "./endpoints.config"
 import path from "path"
 import favicon from "serve-favicon"
 import { connect, connection } from "mongoose"
@@ -10,6 +9,7 @@ import passport from "passport"
 import router from "./routes/msgBoardRoutes"
 import localStrategy from "./modules/passport.config"
 import User, { IUser } from "./models/user"
+import endpoints from "./endpoints"
 
 const app: Express = express()
 const port = process.env.PORT || 5000
