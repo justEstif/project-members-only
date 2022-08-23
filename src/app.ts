@@ -62,13 +62,19 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: endpoints.MONGO_URL }),
-    cookie: { maxAge: 1000 * 30 },
+    cookie: { maxAge: 1000 },
   })
 )
 
 // Passport Middleware
 app.use(passport.initialize())
 app.use(passport.session())
+
+// access the user as currentUser in pug
+app.use(function (req, res, next) {
+  res.locals.currentUser = req.user
+  next()
+})
 
 app.use("/", router)
 
