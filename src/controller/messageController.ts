@@ -5,10 +5,9 @@ import Message from "../models/message"
 
 // NOTE: HOMEPAGE
 export const index_get: RequestHandler = (_, res, next) => {
-  // TODO: Get the user and the message in order of time sent
   Message.find()
     .sort({ timestamp: 1 }) // sort by timestamp
-    .populate("user")
+    .populate("user") // replace user id with user info
     .exec((err, messages) => {
       if (err) next(err)
       else {
@@ -22,8 +21,20 @@ export const index_get: RequestHandler = (_, res, next) => {
 
 // NOTE: READ THE MESSAGES AND OPEN HOMEPAGE AGAIN
 export const index_post = [
-  body("messageTitle").trim().exists().isLength({ min: 1 }),
-  body("messageBody").trim().exists().isLength({ min: 1 }),
+  body("messageTitle")
+    .trim()
+    .exists()
+    .isLength({ min: 1 })
+    .withMessage("Must be atleast one character")
+    .isAlphanumeric()
+    .withMessage("Only alphabets or numbers are accepted"),
+  body("messageBody")
+    .trim()
+    .exists()
+    .isLength({ min: 1 })
+    .withMessage("Must be atleast one character")
+    .isAlphanumeric()
+    .withMessage("Only alphabets or numbers are accepted"),
 
   (req: Request, res: Response, next: NextFunction) => {
     const message = new Message({
