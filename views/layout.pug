@@ -10,22 +10,23 @@ html(lang='en')
   body(class="bg-nord0 font-mono")
     div(class="grid grid-cols-[200px_minmax(900px,_1fr)] m-10")
       div(class="border-r-2 border-nord3")
-        block sidebar
-          ul(class="text-lg flex flex-col gap-4 text-nord4")
-            li(class="hover:text-blue-500")
-              a(href='/') Message
-            block loggedIn
-              li(class="hover:text-blue-500")
-                a(href='/join-club') Join Club
-              li(class="hover:text-blue-500")
-                a(href='/item/create') Become Admin
+        ul(class="text-lg flex flex-col gap-4 text-nord4")
+          li(class="hover:text-blue-500")
+            a(href='/') Message
+          if currentUser
+              if currentUser.membershipStatus !== 'Member'
+                li(class="hover:text-blue-500")
+                  a(href='/join-club') Join Club
+              if !currentUser.admin
+                li(class="hover:text-blue-500")
+                  a(href='/be-admin') Become Admin
               li(class="hover:text-blue-500")
                 a(href='/sign-out') Sign Out
-            block loggedOut
-              li(class="hover:text-blue-500")
-                a(href='/sign-in') Sign In
-              li(class="hover:text-blue-500")
-                a(href='/sign-up') Sign Up
+          else
+            li(class="hover:text-blue-500")
+              a(href='/sign-in') Sign In
+            li(class="hover:text-blue-500")
+              a(href='/sign-up') Sign Up
 
       div(class="mx-5")
         block content
