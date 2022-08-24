@@ -24,7 +24,7 @@ MessageSchema.virtual("url").get(function () {
 
 MessageSchema.virtual("timestampFormatted").get(function () {
   const message = this
-  return DateTime.fromJSDate(message.timestamp).toLocaleString(DateTime.DATE_MED)
+  return DateTime.fromJSDate(message.timestamp).toLocaleString(DateTime.DATETIME_MED)
 })
 
 const Message = model<IMessage>("Message", MessageSchema)
