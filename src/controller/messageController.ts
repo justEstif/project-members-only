@@ -2,8 +2,20 @@ import { RequestHandler } from "express"
 // import User from "../models/user"
 
 // NOTE: HOMEPAGE
-export const index: RequestHandler = (_, res) => {
-  res.render("message_index", { title: "Sign Up" })
+export const index_get: RequestHandler = (_, res, next) => {
+  // TODO: Get the user and the message in order of time sent
+  Message.find()
+    .sort({ timestamp: 1 }) // sort by timestamp
+    .populate("user")
+    .exec((err, messages) => {
+      if (err) next(err)
+      else {
+        res.render("message_index", {
+          title: "Message Board",
+          ...(messages.length !== 0 && { messages: messages }),
+        })
+      }
+    })
 }
 
 export const message_detail: RequestHandler = (_, res) => {
