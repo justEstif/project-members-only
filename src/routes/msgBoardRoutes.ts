@@ -6,7 +6,8 @@ const router = Router()
 
 // NOTE: Messages route
 
-router.get("/", message_controller.index) // Homepage
+router.get("/", message_controller.index_get) // Homepage
+router.post("/", message_controller.index_post) // Homepage
 
 router.get("/message/:id", message_controller.message_detail) // message detail page
 
