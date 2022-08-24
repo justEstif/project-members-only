@@ -64,19 +64,7 @@ export const index_post = [
   },
 ]
 
-// NOTE: Do I even need a separate file?
 export const message_detail: RequestHandler = (req, res, next) => {
-  Message.findById(req.params.id)
-    .populate("user") // replace user id with user info
-    .exec((err, message) => {
-      if (err) next(err)
-      else {
-        res.render("message_detail", {
-          title: "Message Board",
-          message: message
-        })
-      }
-    })
 }
 
 export const message_update_get: RequestHandler = (_, res) => {
