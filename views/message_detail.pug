@@ -1,0 +1,34 @@
+extends layout
+
+
+block content
+  div(class="flex flex-col gap-5")
+    h1(class="text-nord15 text-5xl")= title
+
+  if error
+    p Error getting content.
+
+  else
+    p= message.timestampFormatted
+    if currentUser
+        if currentUser.membershipStatus === 'Member'
+          div(class="flex gap-2")
+            if message.user.fullName !== ""
+              p(class="text-nord7")= message.user.fullName
+            else
+              p(class="text-nord7") (No name provided)
+            p(class="text-nord12")= message.title
+            p(class="text-nord11")= message.body
+          if currentUser.email === message.user.email
+            div(class='flex gap-5')
+              a(href=`/message/${message._id}/update` class="text-nord11") Update
+              a(href=`/message/${message._id}/delete` class="text-nord11") Delete
+          else
+            if currentUser.admin
+              a(href=`/message/${message._id}/delete` class="text-nord11") Delete
+
+    else
+      div(class="flex gap-2")
+        p(class="text-nord7") (anonymous)
+        p(class="text-nord12")= message.title
+        p(class="text-nord11")= message.body
