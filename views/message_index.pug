@@ -8,16 +8,42 @@ block content
     p Error getting content.
   else
     if messages
-      ul(class="mt-4 text-red-500 flex flex-col gap-5")
+      ul(class="mt-4 flex flex-col gap-5 my-6")
         for message in messages
           li
-            a(href=`/message/${message._id}`)
-              p=message.timestamp
-              if currentUser
+            if currentUser
                 if currentUser.membershipStatus === 'Member'
-                    p (#{message.user.fullName}) #{message.title}: #{message.body}
-              else
-                p (anonymous) #{message.title}: #{message.body}
+                  div(class="flex gap-2")
+                    if message.user.email === currentUser.email
+                      p &#128394;
+                      p &#128465;
+
+                    else
+                      if currentUser.admin
+                        p &#128465;
+
+                    p(class="text-nord7")= message.user.fullName
+                    p(class="text-nord12")= message.title
+                    p(class="text-nord11")= message.body
+
+                else
+                  div(class="flex gap-2")
+                    if message.user.email === currentUser.email
+                      p &#128394;
+                      p &#128465;
+                    else
+                      if currentUser.admin
+                        p &#128465;
+
+                    p(class="text-nord2") (anonymous)
+                    p(class="text-nord12")= message.title
+                    p(class="text-nord11")= message.body
+
+            else
+              div(class="flex gap-2")
+                p(class="text-nord7") (anonymous)
+                p(class="text-nord12")= message.title
+                p(class="text-nord11")= message.body
     else
       p There are no messages.
 
