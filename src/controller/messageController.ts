@@ -1,4 +1,6 @@
-import { RequestHandler } from "express"
+import { RequestHandler, Request, Response, NextFunction } from "express"
+import { body, validationResult } from "express-validator"
+import Message from "../models/message"
 // import User from "../models/user"
 
 // NOTE: HOMEPAGE
@@ -17,6 +19,38 @@ export const index_get: RequestHandler = (_, res, next) => {
       }
     })
 }
+
+// NOTE: READ THE MESSAGES AND OPEN HOMEPAGE AGAIN
+export const index_post = [
+  body("messageTitle").trim().exists().isLength({ min: 1 }),
+  body("messageBody").trim().exists().isLength({ min: 1 }),
+
+  (req: Request, res: Response, next: NextFunction) => {
+    const message = new Message({
+      title: req.body.messageTitle,
+      body: req.body.messageBody,
+      user: req.body.userID,
+    })
+
+    const errors = validationResult(req)
+    switch (!errors.isEmpty()) {
+      case true:
+        res.render("sign_up_form", {
+          title: "Sign Up",
+          errors: errors.array(),
+          message: message,
+        })
+        return
+      default:
+        message.save((err) => {
+          if (err) return next(err)
+          else {
+            res.redirect("/")
+          }
+        })
+    }
+  },
+]
 
 export const message_detail: RequestHandler = (_, res) => {
   res.render("message_detail")
