@@ -117,3 +117,7 @@ app.post(
 ## Admin should be able to delete messages
 
 - Make sure to authenticate
+
+- Message update and delete pages should show the date of message, and an option to delete, and the user info.
+
+

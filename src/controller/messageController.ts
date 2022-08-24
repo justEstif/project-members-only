@@ -65,7 +65,6 @@ export const index_post = [
 ]
 
 // NOTE: Do I even need a separate file?
-// NOTE: I could just make it link straight to the update and delete pages?
 export const message_detail: RequestHandler = (req, res, next) => {
   Message.findById(req.params.id)
     .populate("user") // replace user id with user info
