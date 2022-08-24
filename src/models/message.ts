@@ -19,7 +19,7 @@ const MessageSchema = new Schema<IMessage>({
 
 MessageSchema.virtual("url").get(function () {
   const message = this
-  return "/item/" + message._id
+  return "/message/" + message._id
 })
 
 MessageSchema.virtual("timestampFormatted").get(function () {
