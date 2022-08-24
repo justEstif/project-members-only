@@ -1,7 +1,5 @@
 extends layout
 
-block loggedOut
-
 block content
   div(class="flex flex-col gap-5")
     h1(class="text-nord15 text-5xl")= title
@@ -10,10 +8,15 @@ block content
     p Error getting content.
   else
     if messages
-      p=messages
       ul(class="mt-4 text-red-500 flex flex-col gap-5")
         for message in messages
-          li= message
+          li
+            p=message.timestamp
+            if currentUser
+              if currentUser.membershipStatus === 'Member'
+                p (#{message.user.fullName}) #{message.title}: #{message.body}
+            else
+              p (anonymous) #{message.title}: #{message.body}
     else
       p There are no messages.
 
