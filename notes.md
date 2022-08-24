@@ -100,14 +100,20 @@ app.post(
 ## Writing Messages
 
 1. Create the home page
-    - Homepage
-       - messages
-       - form
-        - input for message
-        - submit input, pass value to db, get home page(reloads)
+
+   - Homepage
+     - messages
+     - form
+       - input for message
+       - submit input, pass value to db, get home page(reloads)
+
 2. Create the write messages page
-  - if there is a user show the form, else don't but still show the messages
+   - if there is a user show the form, else don't but still show the messages
 
 - could we have home page have an input section at the bottom, that
 - the home page(messages) get all the messages and shows them
 - the home page has a form at the bottom, and the user can write a message in there and the post request is to add that message to db, and rerender the page
+
+## Admin should be able to delete messages
+
+- Make sure to authenticate
