@@ -10,22 +10,28 @@ block content
     p Error getting content.
   else
     if messages
+      p=messages
       ul(class="mt-4 text-red-500 flex flex-col gap-5")
         for message in messages
           li= message
+    else
+      p There are no messages.
 
     if currentUser
       form(method='POST' action='' autocomplete="off")
         div.form-group(class="flex max-w-lg w-full justify-between gap-5")
-          label(for='message' class="capitalize text-lg ") Enter message:
-          input#message.form-control(type='text' required placeholder='Message' class="text-right px-3  bg-nord0 border border-nord6" name='message' value="" )
+          label(for='messageTitle' class="capitalize text-lg ") Enter message title:
+          input#messageTitle.form-control(type='text' required placeholder='Message Title' class="text-right px-3  bg-nord0 border border-nord6" name='messageTitle' value=(undefined===message ? '' : message.messageTitle) )
+        div.form-group(class="flex max-w-lg w-full justify-between gap-5")
+          label(for='messageBody' class="capitalize text-lg ") Enter message body:
+          input#messageBody.form-control(type='text' required placeholder='Message Body' class="text-right px-3  bg-nord0 border border-nord6" name='messageBody' value=(undefined===message ? '' : message.messageBody) )
 
         input(type="hidden" name="userID" id="userID" value=currentUser._id)
         button.btn.btn-primary(type='submit' class="px-6 py-2.5 bg-nord3 hover:bg-nord10 text-white font-medium text-xs leading-tight") Submit
+    else
+      p Login as user to send message
 
   if errors
     ul(class="mt-4 text-red-500 flex flex-col gap-5")
       for error in errors
         li!= error.msg
-
-
