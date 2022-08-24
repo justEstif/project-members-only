@@ -9,5 +9,5 @@
 # Using:
 
 - Express, Mongodb, Typescript
-- EJS, Tailwind
+- PUG, Tailwind
 - passportjs
