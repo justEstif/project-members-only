@@ -50,6 +50,7 @@ export const index_post = [
           title: "Sign Up",
           errors: errors.array(),
           message: message,
+          messageURL: message.url
         })
         return
       default:
@@ -63,8 +64,20 @@ export const index_post = [
   },
 ]
 
-export const message_detail: RequestHandler = (_, res) => {
-  res.render("message_detail")
+// NOTE: Do I even need a separate file?
+// NOTE: I could just make it link straight to the update and delete pages?
+export const message_detail: RequestHandler = (req, res, next) => {
+  Message.findById(req.params.id)
+    .populate("user") // replace user id with user info
+    .exec((err, message) => {
+      if (err) next(err)
+      else {
+        res.render("message_detail", {
+          title: "Message Board",
+          message: message
+        })
+      }
+    })
 }
 
 export const message_update_get: RequestHandler = (_, res) => {
