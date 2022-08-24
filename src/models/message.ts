@@ -13,7 +13,7 @@ interface IMessage {
 const MessageSchema = new Schema<IMessage>({
   title: { type: String, required: true },
   body: { type: String, required: true },
-  user: { type: Schema.Types.ObjectId, required: true, ref: "user" },
+  user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   timestamp: { type: Date, default: Date.now },
 })
 
