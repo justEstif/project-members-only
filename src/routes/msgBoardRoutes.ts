@@ -13,11 +13,6 @@ router.get("/message/:id", message_controller.message_detail) // message detail 
 
 // Only the sender or an admin can delete a message
 router.get("/message/:id/delete", message_controller.message_delete_get)
-router.post("/message/:id/delete", message_controller.message_delete_post)
-
-// Only the sender of the message can update the message
-router.get("/message:id/update", message_controller.message_update_get)
-router.post("/message:id/update", message_controller.message_update_post)
 
 // NOTE: User route
 
