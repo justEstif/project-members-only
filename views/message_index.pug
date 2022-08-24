@@ -11,12 +11,13 @@ block content
       ul(class="mt-4 text-red-500 flex flex-col gap-5")
         for message in messages
           li
-            p=message.timestamp
-            if currentUser
-              if currentUser.membershipStatus === 'Member'
-                p (#{message.user.fullName}) #{message.title}: #{message.body}
-            else
-              p (anonymous) #{message.title}: #{message.body}
+            a(href=`/message/${message._id}`)
+              p=message.timestamp
+              if currentUser
+                if currentUser.membershipStatus === 'Member'
+                    p (#{message.user.fullName}) #{message.title}: #{message.body}
+              else
+                p (anonymous) #{message.title}: #{message.body}
     else
       p There are no messages.
 
