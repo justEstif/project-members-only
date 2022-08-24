@@ -65,20 +65,34 @@ export const index_post = [
 ]
 
 export const message_detail: RequestHandler = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    Message.findById(req.params.id)
+      .populate("user") // replace user id with user info
+      .exec((err, message) => {
+        if (err) next(err)
+        else {
+          res.render("message_detail", {
+            title: "Message Board",
+            message: message
+          })
+        }
+      })
+  } else {
+    res.redirect("/")
+  }
 }
 
-export const message_update_get: RequestHandler = (_, res) => {
-  res.render("message_update")
-}
-
-export const message_update_post: RequestHandler = (_, res) => {
-  res.render("message_update")
-}
-
-export const message_delete_get: RequestHandler = (_, res) => {
-  res.render("message_delete")
+export const message_delete_get: RequestHandler = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    Message.findByIdAndRemove(req.params.id).exec((err, _) => {
+      if (err) return next(err)
+      res.redirect("/")
+    })
+  } else {
+    res.redirect("/")
+  }
 }
 
 export const message_delete_post: RequestHandler = (_, res) => {
-  res.render("message_delete")
+  res.render("message_update")
 }
