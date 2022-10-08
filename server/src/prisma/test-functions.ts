@@ -1,30 +1,29 @@
-import { Context } from './context'
+import { Context } from "./context";
 
 interface CreateUser {
-  name: string
-  email: string
-  acceptTermsAndConditions: boolean
+  firstName: string;
+  lastName: string;
+  userName: string;
+  password: string;
+  profilePic: string;
+  status: "admin" | "member" | "user";
 }
 
 export async function createUser(user: CreateUser, ctx: Context) {
-  if (user.acceptTermsAndConditions) {
-    return await ctx.prisma.user.create({
-      data: user,
-    })
-  } else {
-    return new Error('User must accept terms!')
-  }
+  return await ctx.prisma.user.create({
+    data: user,
+  });
 }
 
 interface UpdateUser {
-  id: number
-  name: string
-  email: string
+  id: number;
+  name: string;
+  email: string;
 }
 
 export async function updateUsername(user: UpdateUser, ctx: Context) {
   return await ctx.prisma.user.update({
     where: { id: user.id },
     data: user,
-  })
+  });
 }

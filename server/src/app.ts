@@ -6,5 +6,6 @@ const app = express();
 app.use(json());
 app.use(urlencoded({ extended: false }));
 
-app.use("/", router);
+app.use("/api", router);
+
 export default app

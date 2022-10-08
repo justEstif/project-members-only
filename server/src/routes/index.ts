@@ -1,17 +1,10 @@
 import { Router } from "express";
 
 const router = Router();
-const array: string[] = [];
 
-router.get("/", (req, res) => {
-  res.json({ name: "frodo" });
-});
-
-router.get("/test", (req, res) => res.json({ array }));
-
-router.post("/test", (req, res) => {
-  array.push(req.body.item);
-  res.send("success");
+// @path /api/checkhealth
+router.get("/checkhealth", (req, res) => {
+  res.sendStatus(200)
 });
 
 export default router;
