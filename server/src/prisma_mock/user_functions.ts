@@ -1,12 +1,13 @@
 import { Context } from "./context";
 
 interface CreateUser {
+  id: string;
+  email: string;
   firstName: string;
   lastName: string;
   userName: string;
   password: string;
-  profilePic: string;
-  status: "admin" | "member" | "user";
+  rePassword: string;
 }
 
 export async function createUser(user: CreateUser, ctx: Context) {
@@ -16,12 +17,17 @@ export async function createUser(user: CreateUser, ctx: Context) {
 }
 
 interface UpdateUser {
-  id: number;
-  name: string;
+  id: string;
   email: string;
+  firstName: string;
+  lastName: string;
+  userName: string;
+  password: string;
+  rePassword: string;
 }
 
 export async function updateUsername(user: UpdateUser, ctx: Context) {
+  // overwrite the old profile pic
   return await ctx.prisma.user.update({
     where: { id: user.id },
     data: user,
