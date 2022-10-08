@@ -15,7 +15,7 @@ model User {
   userName string
   password string
   profilePic string
-  status enum(admin, member, user) default user
+  role enum(admin, member, user) default user
 }
 
 - store user images on : <Cloudinary>
@@ -41,6 +41,9 @@ model User {
   - delete user
   - admin or user can delete user
 
+### Schema
+TODO Message schema
+
 ## Message
 
 ### Model
@@ -53,6 +56,8 @@ model Message {
   userID: string
 }
 
+### Schema
+TODO Message schema
 ### Route
 - GET /message
   - get messages
