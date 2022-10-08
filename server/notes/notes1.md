@@ -18,7 +18,6 @@ model User {
   role enum(admin, member, user) default user
 }
 
-- store user images on : <Cloudinary>
 - membership-status
   - admin
     - member + delete msg

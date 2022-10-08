@@ -13,7 +13,6 @@ check if only valid users info is allowed for creating user
 check what the response of invalid is
 
 
-make sure the
 ## Model
 
 ```
