@@ -87,10 +87,10 @@ model User {
 ## Schema
 TODO Message schema
 
-schema User {
-  firstName alphabet only
-  lastName alphabet only
-  userName alphabet, number or . only
-  email unique email only
-  password string 10-20 chars
-}
+- schema CreateUser
+
+  - firstName alphabet only
+  - lastName alphabet only
+  - userName alphabet, number and . only
+  - email unique email only
+  - password string
