@@ -12,12 +12,12 @@ datasource db {
 
 model User {
   id        String    @id @default(uuid())
+  role      String    @default("USER")
   firstName String
   lastName  String
   userName  String    @unique
   email     String    @unique
   password  String
-  role      String    @default("USER")
   messages  Message[]
 }
 
