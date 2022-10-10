@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { createUserSchema } from "../../schema/user.schema";
+import { registerSchema } from "../../schema/authentication.schema";
 import validate from "../validate";
 
 describe("User Registration", () => {
@@ -21,7 +21,7 @@ describe("User Registration", () => {
 
     const mockNext: NextFunction = jest.fn();
 
-    validate(createUserSchema)(
+    validate(registerSchema)(
       mockRequest as Request,
       mockResponse as Response,
       mockNext
@@ -49,7 +49,7 @@ describe("User Registration", () => {
 
     const mockNext: NextFunction = jest.fn();
 
-    validate(createUserSchema)(
+    validate(registerSchema)(
       mockRequest as Request,
       mockResponse as Response,
       mockNext

@@ -11,14 +11,17 @@ beforeEach(() => {
 });
 
 const validCreateUser = {
+  id: "randomid",
+  role: "USER",
   name: "Name",
   userName: "richhyName2",
   email: "test@test.com",
   password: "testpassword",
-  passwordConfirmation: "testpassword"
+  passwordConfirmation: "testpassword",
 };
 
 test("show create new user ", async () => {
-  const user = validCreateUser;
-  await expect(mockCreateUser({body: validCreateUser}, ctx)).resolves.toEqual(user);
+  await expect(mockCreateUser(validCreateUser, ctx)).resolves.toEqual(
+    validCreateUser
+  );
 });
