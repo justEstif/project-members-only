@@ -1,7 +1,7 @@
 import { Router } from "express";
 import validate from "../middleware/validate";
-import { createUserSchema } from "../schema/user.schema";
-import { createUserHandler } from "../controller/user.controller";
+import { registerSchema } from "../schema/authentication.schema";
+import { registerUser } from "../controller/authentication.controller";
 
 const router = Router();
 
@@ -40,9 +40,11 @@ router.get("/checkhealth", (_, res) => {
  ** just add the user to the banned list??
  */
 
-// test that only valid users are created
-// @type POST
-// @path /api/user
-router.post("/user", validate(createUserSchema), createUserHandler);
+// authentication routes: register, login, logout
+router.post("/register", validate(registerSchema), registerUser); // POST /api/register
+// router.post("/login", validate(loginSchema), login); // POST /api/login
+// router.get("/logout", requireUser, logout); // GET /api/logout
+
+// middleware called require user to assign the user value
 
 export default router;

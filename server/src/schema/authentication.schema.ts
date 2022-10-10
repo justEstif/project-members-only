@@ -1,6 +1,6 @@
 import { object, string, TypeOf } from "zod";
 
-export const createUserSchema = object({
+export const registerSchema = object({
   body: object({
     name: string({
       required_error: "Name is required",
@@ -23,4 +23,4 @@ export const createUserSchema = object({
   }),
 });
 
-export type CreateUserInput = TypeOf<typeof createUserSchema>;
+export type TRegisterSchema = TypeOf<typeof registerSchema>;
