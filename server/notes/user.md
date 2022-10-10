@@ -98,6 +98,6 @@ TODO Message schema
 
 
 testing the create user route
-- check if the middleware works
-- check if the usercontroller works
-- check if the db works
+- [X] check if the middleware works
+- [ ] check if the usercontroller works
+- [ ] check if the db works
