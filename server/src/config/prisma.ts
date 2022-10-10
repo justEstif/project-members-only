@@ -15,6 +15,4 @@ if (process.env.NODE_ENV === "production") {
   prisma = global.prisma;
 }
 
-console.log("DB is connected")
-
 export default prisma;
