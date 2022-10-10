@@ -94,3 +94,10 @@ TODO Message schema
   - userName alphabet, number and . only
   - email unique email only
   - password string
+
+
+
+testing the create user route
+- check if the middleware works
+- check if the usercontroller works
+- check if the db works
