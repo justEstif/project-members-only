@@ -7,10 +7,9 @@ import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
 
 /**
- * @desc function for creating jwt token
+ * @desc function for creating registering user
  * @param request express request
- * @returns user: registerd used without password
- * @returns token: jwt token
+ * @returns user, token
  */
 export const register = async ({ body }: TRegisterSchema) => {
   const salt = await bcrypt.genSalt(env.SALTWORKFACTOR);
@@ -36,7 +35,7 @@ export const register = async ({ body }: TRegisterSchema) => {
  * @param user prisma user
  * @returns token
  */
-const createJwtToken = (user: User) => {
+export const createJwtToken = (user: User) => {
   const expiresIn = 24 * 60 * 60; // a day
   const secret = env.JWTSECRET;
   const dataStoredInToken = { id: user.id }; // only store user id

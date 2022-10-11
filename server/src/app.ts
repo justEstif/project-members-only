@@ -10,8 +10,8 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 
 // passport
-passport.use(localStrategy)
+passport.use(localStrategy);
 
 app.use("/api", router);
 
-export default app
+export default app;
