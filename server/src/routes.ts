@@ -3,6 +3,7 @@ import validate from "./middleware/validate";
 import { loginSchema, registerSchema } from "./schema/authentication.schema";
 import {
   loginUser,
+  logoutUser,
   registerUser,
 } from "./controller/authentication.controller";
 
@@ -27,8 +28,14 @@ router.post("/register", validate(registerSchema), registerUser);
  * @route POST /api/login
  * @access Public
  */
-router.post("/login", validate(loginSchema), loginUser); // POST /api/login
-// router.get("/logout", requireUser, logout); // GET /api/logout
+router.post("/login", validate(loginSchema), loginUser);
+
+/*
+ * @desc Logout user
+ * @route get /api/logout
+ * @access Public
+ */
+router.get("/logout", logoutUser);
 
 // middleware called require user to assign the user value
 

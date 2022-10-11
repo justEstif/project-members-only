@@ -15,15 +15,14 @@ export const registerUser: RequestHandler = async (req, res) => {
         return res.status(400).json({
           message: "Something is not right",
           user: user,
+          error,
         });
       }
 
       req.login(user, { session: false }, (err) => {
-        if (err) {
-          return res.status(400).json(err);
-        } else {
-          return res.status(200).json({ user, token });
-        }
+        return err
+          ? res.status(400).json(err)
+          : res.status(200).json({ user, token });
       });
     })(req, res);
   } catch (error) {
@@ -45,7 +44,6 @@ export const registerUser: RequestHandler = async (req, res) => {
  * @desc function to login user
  */
 export const loginUser: RequestHandler = async (req, res) => {
-  console.log(req.body);
   passport.authenticate("local", { session: false }, (error, user) => {
     if (error || !user) {
       return res.status(400).json({
@@ -63,4 +61,15 @@ export const loginUser: RequestHandler = async (req, res) => {
       }
     });
   })(req, res);
+};
+
+/**
+ * @desc function to logout user
+ */
+export const logoutUser: RequestHandler = (req, res) => {
+  req.logout((err) => {
+    return err
+      ? res.send(200).json(err)
+      : res.send(200).json("User logged out");
+  });
 };
