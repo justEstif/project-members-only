@@ -1,7 +1,6 @@
 import { MockContext, Context, createMockContext } from "../context";
 import { mockCreateUser } from "../user_functions";
 
-// NOTE https://github.com/prisma/prisma-examples/blob/latest/databases/sql-server/tests/prisma.test.ts
 let mockCtx: MockContext;
 let ctx: Context;
 

@@ -1,8 +1,9 @@
-import { cleanEnv, port, num } from "envalid";
+import { cleanEnv, port, num, str } from "envalid";
 
 const env = cleanEnv(process.env, {
-  port: port({ default: 4200 }),
-  saltWorkFactor: num({ default: 10 }),
+  PORT: port({ default: 4200 }),
+  SALTWORKFACTOR: num({ default: 10 }),
+  JWTSECRET: str(),
 });
 
 export default env;
