@@ -41,7 +41,19 @@ router.get("/checkhealth", (_, res) => {
  */
 
 // authentication routes: register, login, logout
-router.post("/register", validate(registerSchema), registerUser); // POST /api/register
+
+/*
+ * @desc Register a user
+ * @route POST /api/register
+ * @access Public
+ */
+router.post("/register", validate(registerSchema), registerUser);
+
+/*
+ * @desc Login a user
+ * @route POST /api/login
+ * @access Public
+ */
 // router.post("/login", validate(loginSchema), login); // POST /api/login
 // router.get("/logout", requireUser, logout); // GET /api/logout
 
