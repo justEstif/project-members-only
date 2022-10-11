@@ -3,10 +3,17 @@ import omit from "lodash.omit";
 import prisma from "../config/prisma";
 import env from "../config/env";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { User } from "@prisma/client";
 
+/**
+ * @desc function for creating jwt token
+ * @param request express request
+ * @returns user: registerd used without password
+ * @returns token: jwt token
+ */
 export const register = async ({ body }: TRegisterSchema) => {
-  // hash password
-  const salt = await bcrypt.genSalt(env.saltWorkFactor);
+  const salt = await bcrypt.genSalt(env.SALTWORKFACTOR);
   const hashedPassword = bcrypt.hashSync(body.password, salt);
 
   const user = await prisma.user.create({
@@ -18,5 +25,22 @@ export const register = async ({ body }: TRegisterSchema) => {
     },
   });
 
-  return omit(user, ["password"]);
+  return {
+    user: omit(user, ["password"]),
+    token: createJwtToken(user),
+  };
+};
+
+/**
+ * @desc function for creating jwt token
+ * @param user prisma user
+ * @returns token
+ */
+const createJwtToken = (user: User) => {
+  const expiresIn = 24 * 60 * 60; // a day
+  const secret = env.JWTSECRET;
+  const dataStoredInToken = { id: user.id }; // only store user id
+  return {
+    token: jwt.sign(dataStoredInToken, secret, { expiresIn }),
+  };
 };
