@@ -40,6 +40,7 @@ export const createJwtToken = (user: User) => {
   const secret = env.JWTSECRET;
   const dataStoredInToken = { id: user.id }; // only store user id
   return {
+    /** JWT Token with user id */
     token: jwt.sign(dataStoredInToken, secret, { expiresIn }),
   };
 };

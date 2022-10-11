@@ -1,5 +1,13 @@
 import { object, string, TypeOf } from "zod";
 
+/**
+ * @description schema of register
+ * @param name
+ * @param userName
+ * @param email
+ * @param password
+ * @param passwordConfirmation
+ */
 export const registerSchema = object({
   body: object({
     name: string({
@@ -25,6 +33,11 @@ export const registerSchema = object({
 
 export type TRegisterSchema = TypeOf<typeof registerSchema>;
 
+/**
+ * @description schema of login
+ * @param email
+ * @param password
+ */
 export const loginSchema = object({
   body: object({
     email: string({
