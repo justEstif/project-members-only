@@ -1,6 +1,6 @@
 import express, { urlencoded, json } from "express";
 import passport from "passport";
-import { localStrategy } from "./config/passport";
+import { jwtStrategy, localStrategy } from "./config/passport";
 import router from "./routes";
 
 const app = express();
@@ -11,6 +11,7 @@ app.use(urlencoded({ extended: false }));
 
 // passport
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 app.use("/api", router);
 
