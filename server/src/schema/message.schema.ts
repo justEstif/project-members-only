@@ -1,6 +1,6 @@
 import { object, string, TypeOf } from "zod";
 
-export const createSchema = object({
+export const messageSchema = object({
   body: object({
     text: string({
       required_error: "Text is required",
@@ -8,4 +8,4 @@ export const createSchema = object({
   }),
 });
 
-export type TCreateSchema = TypeOf<typeof createSchema>;
+export type TCreateSchema = TypeOf<typeof messageSchema>;

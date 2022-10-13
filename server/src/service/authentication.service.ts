@@ -4,7 +4,7 @@ import env from "../config/env";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
-import { omitFromUser } f../utils/prismaOmitclude";
+import { omitFromUser } from "../utils/prismaOmit";
 
 /**
  * @desc function for creating registering user
