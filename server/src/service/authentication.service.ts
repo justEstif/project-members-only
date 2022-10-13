@@ -8,8 +8,9 @@ import { omitFromUser } from "../utils/prismaOmit";
 
 /**
  * @desc function for creating registering user
- * @param request express request
- * @returns user, token
+ * @param request: Express.Request
+ * @returns user: PrismaClient.User
+ * @returns token: string
  */
 export const register = async ({ body }: TRegisterSchema) => {
   const salt = await bcrypt.genSalt(env.SALTWORKFACTOR);
@@ -33,7 +34,7 @@ export const register = async ({ body }: TRegisterSchema) => {
 /**
  * @desc function for creating jwt token
  * @param user prisma user
- * @returns token
+ * @returns token: string
  */
 export const createJwtToken = (user: User) => {
   const expiresIn = 24 * 60 * 60; // a day

@@ -2,11 +2,11 @@ import { object, string, TypeOf } from "zod";
 
 /**
  * @description schema of register
- * @param name
- * @param userName
- * @param email
- * @param password
- * @param passwordConfirmation
+ * @param name: string
+ * @param userName: string
+ * @param email: string
+ * @param password: string
+ * @param passwordConfirmation: string
  */
 export const registerSchema = object({
   body: object({

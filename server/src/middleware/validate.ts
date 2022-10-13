@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { AnyZodObject, ZodError } from "zod";
 
+/**
+ * @description middlware for validating req.body against schema
+ * @returns either next function or error
+ */
 const validate =
   (schema: AnyZodObject) =>
   (req: Request, res: Response, next: NextFunction) => {
