@@ -101,3 +101,10 @@ testing the create user route
 - [X] check if the middleware works
 - [ ] check if the usercontroller works
 - [ ] check if the db works
+
+## Routes
+
+- GET /user/:id -> go to the user page
+- POST /user -> register user
+- UPDATE /user/:id -> update user
+- DELETE /user/:id -> delete user
