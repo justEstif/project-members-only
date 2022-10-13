@@ -7,18 +7,11 @@ import {
   logoutUser,
   registerUser,
 } from "./controller/authentication.controller";
-import { createMessage } from "./controller/message.controller";
+import { createMessage, getMessages } from "./controller/message.controller";
 import passport from "passport";
 import { messageSchema } from "./schema/message.schema";
 
 const router = Router();
-
-/**
- * @desc Get all messages
- * @route GET /api/message
- * @access Public(with limitations)
- */
-// router.get("/message/", getMessages)
 
 /**
  * @desc Get a message
@@ -119,6 +112,17 @@ router.post(
     validate(messageSchema),
   ],
   createMessage
+);
+
+/**
+ * @desc Get all messages
+ * @route GET /api/message
+ * @access Public(with limitations)
+ */
+router.get(
+  "/message/",
+  passport.authenticate("jwt", { session: false }),
+  getMessages
 );
 
 export default router;
