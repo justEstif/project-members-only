@@ -69,7 +69,7 @@ export const loginUser: RequestHandler = async (req, res) => {
 export const logoutUser: RequestHandler = (req, res) => {
   req.logout((err) => {
     return err
-      ? res.send(200).json(err)
-      : res.send(200).json("User logged out");
+      ? res.status(200).json(err)
+      : res.status(200).json("User logged out");
   });
 };
