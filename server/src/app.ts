@@ -15,4 +15,6 @@ passport.use(jwtStrategy);
 
 app.use("/api", router);
 
+// TODO add error handler middleware
+
 export default app;
