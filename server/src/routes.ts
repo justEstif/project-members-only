@@ -1,55 +1,17 @@
 import { Router } from "express";
 import validate from "./middleware/validate";
+import requireUser from "./middleware/requireUser";
 import { loginSchema, registerSchema } from "./schema/authentication.schema";
 import {
   loginUser,
   logoutUser,
   registerUser,
 } from "./controller/authentication.controller";
+import { createMessage } from "./controller/message.controller";
 import passport from "passport";
+import { messageSchema } from "./schema/message.schema";
 
 const router = Router();
-
-/**
- * @desc Check if the api is working
- * @route GET /api/checkhealth
- * @access Public
- */
-router.get("/checkhealth", (_, res) => {
-  res.sendStatus(200);
-});
-
-/** NOTE authentication routes: register, login, logout */
-
-/*
- * @desc Register a user
- * @route POST /api/register
- * @access Public
- */
-router.post("/register", validate(registerSchema), registerUser);
-
-/*
- * @desc Login a user
- * @route POST /api/login
- * @access Public
- */
-router.post("/login", validate(loginSchema), loginUser);
-
-/*
- * @desc Logout user
- * @route get /api/logout
- * @access Public
- */
-router.get("/logout", logoutUser);
-
-/** NOTE Message routes: get all, get one, create */
-
-/**
- * @desc Post a message
- * @route Post /api/message
- * @access Private: only logged in users
- */
-// router.post("/message",[ passport.authenticate("jwt", { session: false }), requireUser ], createMessage)
 
 /**
  * @desc Get all messages
@@ -109,6 +71,54 @@ router.get(
       token: req.query.user,
     });
   }
+);
+/**
+ * @desc Check if the api is working
+ * @route GET /api/checkhealth
+ * @access Public
+ */
+router.get("/checkhealth", (_, res) => {
+  res.sendStatus(200);
+});
+
+/** NOTE authentication routes: register, login, logout */
+
+/**
+ * @desc Register a user
+ * @route POST /api/register
+ * @access Public
+ */
+router.post("/register", validate(registerSchema), registerUser);
+
+/**
+ * @desc Login a user
+ * @route POST /api/login
+ * @access Public
+ */
+router.post("/login", validate(loginSchema), loginUser);
+
+/**
+ * @desc Logout user
+ * @route get /api/logout
+ * @access Public
+ */
+router.get("/logout", logoutUser);
+
+/** NOTE Message routes: get all, get one, create */
+
+/**
+ * @desc Post a message
+ * @route Post /api/message
+ * @access Private: only logged in users
+ */
+router.post(
+  "/message",
+  [
+    passport.authenticate("jwt", { session: false }),
+    requireUser,
+    validate(messageSchema),
+  ],
+  createMessage
 );
 
 export default router;
