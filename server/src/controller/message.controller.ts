@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { Response } from "express";
 import { TRequest } from "../interface";
 import { TCreateSchema } from "../schema/message.schema";
@@ -10,11 +11,16 @@ export const createMessage = async (
   req: TRequest<TCreateSchema["body"]>,
   res: Response
 ) => {
-  const message = await prisma.message.create({
-    data: {
-      text: req.body.text,
-      userId: req.user.id,
-    },
-  });
-  res.send(200).json(message);
+  if (!req.user) {
+    res.status(403).json("No jwt token");
+  } else {
+    const { id } = req.user as User;
+    const message = await prisma.message.create({
+      data: {
+        text: req.body.text,
+        userId: id,
+      },
+    });
+    res.status(200).json(message);
+  }
 };
