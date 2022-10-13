@@ -2,8 +2,8 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 import prisma from "../config/prisma";
 import bcrypt from "bcryptjs";
-import omit from "lodash.omit";
 import env from "./env";
+import { omitFromUser } from "../utils/prismaOmit";
 
 /**
  * @returns user without password
@@ -25,7 +25,7 @@ export const localStrategy = new LocalStrategy(
       ? cb(null, false, { message: "Incorrect email or password" })
       : !(await bcrypt.compare(password, user.password).catch(() => false))
       ? cb(null, false, { message: "Incorrect email or password" })
-      : cb(null, omit(user, ["password"]), {
+      : cb(null, omitFromUser(user, "password"), {
           message: "Logged in Successfully",
         });
   }
@@ -45,6 +45,6 @@ export const jwtStrategy = new JwtStrategy(
         id: jwtPayload.id,
       },
     });
-    return user ? cb(null, user) : cb(false);
+    return user ? cb(null, omitFromUser(user, "password")) : cb(false);
   }
 );

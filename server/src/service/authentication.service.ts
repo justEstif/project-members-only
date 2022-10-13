@@ -1,10 +1,10 @@
 import { TRegisterSchema } from "../schema/authentication.schema";
-import omit from "lodash.omit";
 import prisma from "../config/prisma";
 import env from "../config/env";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
+import { omitFromUser } f../utils/prismaOmitclude";
 
 /**
  * @desc function for creating registering user
@@ -25,7 +25,7 @@ export const register = async ({ body }: TRegisterSchema) => {
   });
 
   return {
-    user: omit(user, ["password"]),
+    user: omitFromUser(user, "password"),
     token: createJwtToken(user),
   };
 };
@@ -39,8 +39,5 @@ export const createJwtToken = (user: User) => {
   const expiresIn = 24 * 60 * 60; // a day
   const secret = env.JWTSECRET;
   const dataStoredInToken = { id: user.id }; // only store user id
-  return {
-    /** JWT Token with user id */
-    token: jwt.sign(dataStoredInToken, secret, { expiresIn }),
-  };
+  return jwt.sign(dataStoredInToken, secret, { expiresIn });
 };

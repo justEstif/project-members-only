@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import omit from "lodash.omit";
+import { omitFromUser } f../utils/prismaOmitclude";
 import { Context } from "./context";
 
 export async function mockCreateUser(registerInfo: User, ctx: Context) {
@@ -13,5 +13,5 @@ export async function mockCreateUser(registerInfo: User, ctx: Context) {
       role: registerInfo.role,
     },
   });
-  return omit(user, ["password"]); // don't return the password
+  return omitFromUser(user, "password");
 }
