@@ -1,7 +1,9 @@
 import { User } from "@prisma/client";
 import { omitFromMessage } from "../utils/prismaOmit";
 
-/** NOTE function that get the message*/
+/**
+ * @description function that gets the message
+ */
 export const getMessagesForUser = async (currentUser: User | undefined) => {
   if (!currentUser) {
     const messages = await prisma.message.findMany({});

@@ -4,7 +4,7 @@ import passport from "passport";
 import { createJwtToken, register } from "../service/authentication.service";
 
 /**
- * @desc function to register user and login
+ * @description function to register user and login
  */
 export const registerUser: RequestHandler = async (req, res) => {
   try {
@@ -29,7 +29,7 @@ export const registerUser: RequestHandler = async (req, res) => {
 };
 
 /**
- * @desc function to login user
+ * @description function to login user
  */
 export const loginUser: RequestHandler = async (req, res) => {
   passport.authenticate("local", { session: false }, (error, user) => {
@@ -46,7 +46,7 @@ export const loginUser: RequestHandler = async (req, res) => {
 };
 
 /**
- * @desc function to logout user
+ * @description function to logout user
  */
 export const logoutUser: RequestHandler = (req, res) => {
   req.logout((err) => {
