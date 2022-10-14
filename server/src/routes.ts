@@ -13,27 +13,6 @@ import { messageSchema } from "./schema/message.schema";
 
 const router = Router();
 
-/**
- * @desc Get a message
- * @route GET /api/message/:id
- * @access Public (with limitations)
- */
-// router.get("/message/:id", getMessage)
-
-/**
- * @desc Delete a message
- * @route DELETE /api/message/:id
- * @access Private
- */
-// router.delete("/message/:id", deleteMessage)
-
-/**
- * @desc Update a message
- * @route UPDATE /api/message/:id
- * @access Private
- */
-// router.update("/message/:id", updateMessage)
-
 /** NOTE User Routes: get user, delete user, update user */
 /**
  * @desc Get user page
@@ -125,4 +104,24 @@ router.get(
   getMessages
 );
 
+/**
+ * @desc Get a message
+ * @route GET /api/message/:id
+ * @access Public (with limitations)
+ */
+// router.get("/message/:id", getMessage)
+
+/**
+ * @desc Delete a message
+ * @route DELETE /api/message/:id
+ * @access Private
+ */
+// router.delete("/message/:id", deleteMessage)
+
+/**
+ * @desc Update a message
+ * @route UPDATE /api/message/:id
+ * @access Private
+ */
+// router.update("/message/:id", updateMessage)
 export default router;

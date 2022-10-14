@@ -5,7 +5,7 @@ import { TCreateSchema } from "../schema/message.schema";
 import { getMessagesForUser } from "../service/message.service";
 
 /**
- * @desc function for creating a message
+ * @description function for creating a message
  * @return response with message
  */
 export const createMessage = async (
@@ -33,14 +33,29 @@ export const createMessage = async (
  * @return error is user is doesn't match
  */
 export const getMessages: RequestHandler = async (req, res) => {
-  if (req.user) {
-    const { error, messages } = await getMessagesForUser(req.user as User);
-    if (messages) {
-      res.status(200).json(messages);
-    } else {
-      res.status(400).json(error);
-    }
-  } else {
-    res.status(400).json("User not found");
+  const { error, messages } = await getMessagesForUser(req.user as User);
+  messages ? res.status(200).json(messages) : res.status(400).json(error);
+};
+
+/**
+ * @description function to delete message
+ * @return success message if deleted or error
+ */
+export const deleteMessage: RequestHandler = async (req, res) => {
+  try {
+    await prisma.message.delete({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.status(200).json({
+      message: "Deleted message",
+      url: req.url,
+    });
+  } catch (error) {
+    res.status(403).json({
+      error: "Couldn't delete message",
+      url: req.url,
+    });
   }
 };
