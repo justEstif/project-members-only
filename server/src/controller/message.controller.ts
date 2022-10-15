@@ -2,7 +2,10 @@ import { User } from "@prisma/client";
 import { RequestHandler, Response } from "express";
 import { TRequest } from "../interface";
 import { TCreateSchema } from "../schema/message.schema";
-import { getMessagesForUser } from "../service/message.service";
+import {
+  deleteMessageForUser,
+  getMessagesForUser,
+} from "../service/message.service";
 
 /**
  * @description function for creating a message
@@ -42,20 +45,9 @@ export const getMessages: RequestHandler = async (req, res) => {
  * @return success message if deleted or error
  */
 export const deleteMessage: RequestHandler = async (req, res) => {
-  try {
-    await prisma.message.delete({
-      where: {
-        id: req.params.id,
-      },
-    });
-    res.status(200).json({
-      message: "Deleted message",
-      url: req.url,
-    });
-  } catch (error) {
-    res.status(403).json({
-      error: "Couldn't delete message",
-      url: req.url,
-    });
-  }
+  const { error, message } = await deleteMessageForUser(
+    req.user as User,
+    req.params.id
+  );
+  message ? res.status(200).json(message) : res.status(403).json(error);
 };

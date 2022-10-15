@@ -47,3 +47,35 @@ export const getMessagesForUser = async (currentUser: User | undefined) => {
     }
   }
 };
+
+export const deleteMessageForUser = async (
+  currentUser: User | undefined,
+  messageId: string
+) => {
+  if (currentUser) {
+    const { id, role } = currentUser;
+    try {
+      role === "ADMIN"
+        ? await prisma.message.delete({
+            where: { id: messageId },
+          })
+        : await prisma.message.deleteMany({
+            where: { AND: [{ id: messageId }, { userId: id }] },
+          });
+      return {
+        message: "Deleted message",
+        error: null,
+      };
+    } catch (error) {
+      return {
+        message: null,
+        error: "Prisma error; couldn't delete message",
+      };
+    }
+  } else {
+    return {
+      message: null,
+      error: "Auth error; couldn't delete message",
+    };
+  }
+};
