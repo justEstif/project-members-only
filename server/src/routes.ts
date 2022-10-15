@@ -7,7 +7,11 @@ import {
   logoutUser,
   registerUser,
 } from "./controller/authentication.controller";
-import { createMessage, getMessages } from "./controller/message.controller";
+import {
+  createMessage,
+  deleteMessage,
+  getMessages,
+} from "./controller/message.controller";
 import passport from "passport";
 import { messageSchema } from "./schema/message.schema";
 
@@ -105,6 +109,17 @@ router.get(
 );
 
 /**
+ * @desc Delete a message
+ * @route DELETE /api/message/:id
+ * @access Private
+ */
+router.delete(
+  "/message/:id",
+  [passport.authenticate("jwt", { session: false }), requireUser],
+  deleteMessage
+);
+
+/**
  * @desc Get a message
  * @route GET /api/message/:id
  * @access Public (with limitations)
@@ -112,16 +127,10 @@ router.get(
 // router.get("/message/:id", getMessage)
 
 /**
- * @desc Delete a message
- * @route DELETE /api/message/:id
- * @access Private
- */
-// router.delete("/message/:id", deleteMessage)
-
-/**
  * @desc Update a message
  * @route UPDATE /api/message/:id
  * @access Private
  */
 // router.update("/message/:id", updateMessage)
+
 export default router;
