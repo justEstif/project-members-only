@@ -10,44 +10,15 @@ import {
 import {
   createMessage,
   deleteMessage,
+  getMessage,
   getMessages,
+  updateMessage,
 } from "./controller/message.controller";
 import passport from "passport";
 import { messageSchema } from "./schema/message.schema";
 
 const router = Router();
 
-/** NOTE User Routes: get user, delete user, update user */
-/**
- * @desc Get user page
- * @route GET /api/user/:id
- * @access Public
- */
-
-/**
- * @desc Update user info
- * @route UPDATE /api/user/:id
- * @access Private
- */
-
-/**
- * @desc Delete user
- * @route DELETE /api/user/:id
- * @access Private
- */
-
-// middleware called require user to assign the user value
-
-router.get(
-  "/random",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    res.status(200).json({
-      user: req.user,
-      token: req.query.user,
-    });
-  }
-);
 /**
  * @desc Check if the api is working
  * @route GET /api/checkhealth
@@ -56,8 +27,6 @@ router.get(
 router.get("/checkhealth", (_, res) => {
   res.sendStatus(200);
 });
-
-/** NOTE authentication routes: register, login, logout */
 
 /**
  * @desc Register a user
@@ -79,8 +48,6 @@ router.post("/login", validate(loginSchema), loginUser);
  * @access Public
  */
 router.get("/logout", logoutUser);
-
-/** NOTE Message routes: get all, get one, create */
 
 /**
  * @desc Post a message
@@ -109,9 +76,35 @@ router.get(
 );
 
 /**
+ * @desc Get a message
+ * @route GET /api/message/:id
+ * @access Public (with limitations)
+ */
+router.get(
+  "/message/:id",
+  passport.authenticate("jwt", { session: false }),
+  getMessage
+);
+
+/**
+ * @desc Update a message
+ * @route UPDATE /api/message/:id
+ * @access Private
+ */
+router.put(
+  "/message/:id",
+  [
+    passport.authenticate("jwt", { session: false }),
+    requireUser,
+    validate(messageSchema),
+  ],
+  updateMessage
+);
+
+/**
  * @desc Delete a message
  * @route DELETE /api/message/:id
- * @access Private
+ * @access Private: only admin or the write of the message
  */
 router.delete(
   "/message/:id",
@@ -120,17 +113,15 @@ router.delete(
 );
 
 /**
- * @desc Get a message
- * @route GET /api/message/:id
- * @access Public (with limitations)
- */
-// router.get("/message/:id", getMessage)
-
-/**
- * @desc Update a message
- * @route UPDATE /api/message/:id
+ * @desc Update user info
+ * @route UPDATE /api/user/:id
  * @access Private
  */
-// router.update("/message/:id", updateMessage)
+
+/**
+ * @desc Delete user
+ * @route DELETE /api/user/:id
+ * @access Private, only user or admin
+ */
 
 export default router;

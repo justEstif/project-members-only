@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import { TMessage } from "../schema/message.schema";
 import { omitFromMessage } from "../utils/prismaOmit";
+import prisma from "../config/prisma";
 
 /**
  * @description function to create a message

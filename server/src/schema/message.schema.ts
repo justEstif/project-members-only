@@ -12,4 +12,4 @@ export const messageSchema = object({
   }),
 });
 
-export type TCreateSchema = TypeOf<typeof messageSchema>;
+export type TMessage = TypeOf<typeof messageSchema>;
