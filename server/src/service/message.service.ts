@@ -1,53 +1,149 @@
 import { User } from "@prisma/client";
+import { TMessage } from "../schema/message.schema";
 import { omitFromMessage } from "../utils/prismaOmit";
 
 /**
- * @description function that gets the message
+ * @description function to create a message
  */
-export const getMessagesForUser = async (currentUser: User | undefined) => {
+export const createMessageForUser = async (
+  currentUser: User | undefined,
+  messageText: TMessage["body"]
+) => {
   if (!currentUser) {
-    const messages = await prisma.message.findMany({});
     return {
-      messages: messages.map((message) => omitFromMessage(message, "userId")),
-      error: null,
+      message: null,
+      error: "No jwt token; couldn't create message",
     };
   } else {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: currentUser.id,
-      },
-    });
-    if (user) {
-      if (user.role === "USER") {
-        const messages = await prisma.message.findMany({});
-        return {
-          messages: messages.map((message) =>
-            omitFromMessage(message, "userId")
-          ),
-          error: null,
-        };
-      } else {
-        const messages = await prisma.message.findMany({
-          include: {
-            user: {
-              select: {
-                id: true,
-                userName: true,
-              },
-            },
-          },
-        });
-        return { messages, error: null };
-      }
-    } else {
+    const { id } = currentUser;
+
+    try {
+      const message = await prisma.message.create({
+        data: {
+          text: messageText.text,
+          userId: id,
+        },
+      });
       return {
-        messages: null,
-        error: "User not found",
+        message,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        message: null,
+        error: "Prisma error; couldn't create message",
       };
     }
   }
 };
 
+/**
+ * @description function that gets the message
+ */
+export const getMessagesForUser = async (currentUser: User | undefined) => {
+  try {
+    if (!currentUser || currentUser.role === "USER") {
+      const messages = await prisma.message.findMany({}); // NOTE thi could be empty
+      return {
+        messages: messages.map((message) => omitFromMessage(message, "userId")),
+        error: null,
+      };
+    } else {
+      const messages = await prisma.message.findMany({
+        include: {
+          user: {
+            select: {
+              id: true,
+              userName: true,
+            },
+          },
+        },
+      });
+      return { messages, error: null };
+    }
+  } catch (error) {
+    return {
+      messages: null,
+      error: "Prisma error; couldn't get messages",
+    };
+  }
+};
+
+/**
+ * @description function to get a single message
+ */
+export const getMessageForUser = async (
+  currentUser: User | undefined,
+  messageId: string
+) => {
+  const message = await prisma.message.findUnique({
+    where: {
+      id: messageId,
+    },
+  });
+  return !message
+    ? {
+        error: "No message found",
+        message: null,
+      }
+    : !currentUser || currentUser.role === "USER"
+    ? {
+        message: omitFromMessage(message, "userId"),
+        error: null,
+      }
+    : {
+        message,
+        error: null,
+      };
+};
+
+/**
+ * @description function to update a message
+ */
+export const updateMessageForUser = async (
+  currentUser: User | undefined,
+  messageId: string,
+  updatedText: TMessage["body"]
+) => {
+  if (currentUser) {
+    const { id } = currentUser;
+    try {
+      await prisma.message.updateMany({
+        where: {
+          AND: [
+            {
+              id: messageId,
+            },
+            {
+              userId: id,
+            },
+          ],
+        },
+        data: {
+          text: updatedText.text,
+        },
+      });
+      return {
+        message: "Updated message",
+        error: null,
+      };
+    } catch (_error) {
+      return {
+        message: "",
+        error: "Prisma error; couldn't update message",
+      };
+    }
+  } else {
+    return {
+      message: null,
+      error: "User error; couldn't update message",
+    };
+  }
+};
+
+/**
+ * @description function to delete a message
+ */
 export const deleteMessageForUser = async (
   currentUser: User | undefined,
   messageId: string
