@@ -1,4 +1,5 @@
 import { Router } from "express";
+import passport from "passport";
 import validate from "./middleware/validate";
 import requireUser from "./middleware/requireUser";
 import { loginSchema, registerSchema } from "./schema/authentication.schema";
@@ -14,7 +15,6 @@ import {
   getMessages,
   updateMessage,
 } from "./controller/message.controller";
-import passport from "passport";
 import { messageSchema } from "./schema/message.schema";
 
 const router = Router();
@@ -113,10 +113,15 @@ router.delete(
 );
 
 /**
- * @desc Update user info
+ * @description Update user info
  * @route UPDATE /api/user/:id
  * @access Private
  */
+router.put("/user/:id", [
+  passport.authenticate("jwt", { session: false }),
+  requireUser,
+  validate(registerSchema),
+]);
 
 /**
  * @desc Delete user

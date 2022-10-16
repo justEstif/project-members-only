@@ -15,7 +15,7 @@ import {
  * @return response with message
  */
 export const createMessage = async (
-  req: TRequest<TMessage["body"]>,
+  req: TRequest<TMessage["body"], []>,
   res: Response
 ) => {
   const { message, error } = await createMessageForUser(
