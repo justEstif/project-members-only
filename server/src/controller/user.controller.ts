@@ -1,8 +1,11 @@
 import { User } from "@prisma/client";
-import { Response } from "express";
+import { RequestHandler, Response } from "express";
 import { TRequest } from "../interface";
 import { TUpdateSchema } from "../schema/user.schema";
 
+/**
+ * @description function to update user
+ */
 export const updateUser = async (
   req: TRequest<TUpdateSchema["body"], { id: string }>,
   res: Response
@@ -33,11 +36,44 @@ export const updateUser = async (
           error: "Prisma error; couldn't updated user",
         });
       }
-      // TODO update user here
     } else {
       res.status(400).json({
         user: null,
         error: "Auth error; couldn't updated user",
+      });
+    }
+  }
+};
+
+/**
+ * @description function to delete user
+ */
+export const deleteUser: RequestHandler = async (req, res) => {
+  if (!req.user) res.status(403).json("No user; couldn't delete user");
+  else {
+    const user = req.user as User;
+
+    if (user.id === req.params.id || user.role === "ADMIN") {
+      try {
+        const deleteUser = await prisma.user.delete({
+          where: {
+            id: user.id,
+          },
+        });
+        res.status(200).json({
+          user: deleteUser,
+          error: null,
+        });
+      } catch (error) {
+        res.status(400).json({
+          error: "Prisma error; couldn't delete user",
+          user: null,
+        });
+      }
+    } else {
+      res.status(400).json({
+        error: "Auth error; couldn't delete user",
+        user: null,
       });
     }
   }
