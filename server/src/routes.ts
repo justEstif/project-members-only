@@ -16,6 +16,7 @@ import {
   updateMessage,
 } from "./controller/message.controller";
 import { messageSchema } from "./schema/message.schema";
+import { deleteUser, updateUser } from "./controller/user.controller";
 
 const router = Router();
 
@@ -115,18 +116,27 @@ router.delete(
 /**
  * @description Update user info
  * @route UPDATE /api/user/:id
- * @access Private
+ * @access Private; can only update your own account
  */
-router.put("/user/:id", [
-  passport.authenticate("jwt", { session: false }),
-  requireUser,
-  validate(registerSchema),
-]);
+router.put(
+  "/user/:id",
+  [
+    passport.authenticate("jwt", { session: false }),
+    requireUser,
+    validate(registerSchema),
+  ],
+  updateUser
+);
 
 /**
  * @desc Delete user
  * @route DELETE /api/user/:id
  * @access Private, only user or admin
  */
+router.delete(
+  "/user/:id",
+  [passport.authenticate("jwt", { session: false }), requireUser],
+  deleteUser
+);
 
 export default router;
