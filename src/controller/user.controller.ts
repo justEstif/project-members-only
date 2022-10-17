@@ -1,7 +1,10 @@
 import { User } from "@prisma/client";
+import bcrypt from "bcryptjs";
+import env from "../config/env";
 import { RequestHandler, Response } from "express";
 import { TRequest } from "../interface";
 import { TUpdateSchema } from "../schema/user.schema";
+import { omitFromUser } from "../utils/prismaOmit";
 
 /**
  * @description function to update user
@@ -16,6 +19,8 @@ export const updateUser = async (
     const { id } = req.user as User;
     if (id === req.params.id) {
       try {
+        const salt = await bcrypt.genSalt(env.SALTWORKFACTOR);
+        const hashedPassword = bcrypt.hashSync(req.body.password, salt);
         const updatedUser = await prisma.user.update({
           where: {
             id: id,
@@ -24,10 +29,11 @@ export const updateUser = async (
             name: req.body.name,
             userName: req.body.userName,
             email: req.body.email,
+            password: hashedPassword,
           },
         });
         res.status(200).json({
-          user: updatedUser,
+          user: omitFromUser(updatedUser, "password"),
           error: null,
         });
       } catch (error) {
