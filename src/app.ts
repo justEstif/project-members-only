@@ -13,6 +13,7 @@ app.use(urlencoded({ extended: false }));
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
+app.use(passport.initialize())
 app.use("/api", router);
 
 // TODO add error handler middleware

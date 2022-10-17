@@ -1,0 +1,3 @@
+- Make sure to delete the token on logout
+- What to do when a user is already logged in, but a login request is sent?
+  - This is a problem that has to be handled on the front end.
