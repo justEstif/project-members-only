@@ -1,8 +1,8 @@
-import { object, string, number } from "zod";
+import { object, string } from "zod";
 
 const envSchema = object({
-  PORT: number(),
-  SALTWORKFACTOR: number(),
+  PORT: string().transform(Number),
+  SALTWORKFACTOR: string().transform(Number),
   JWTSECRET: string(),
 });
 
