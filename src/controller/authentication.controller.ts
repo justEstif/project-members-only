@@ -16,14 +16,14 @@ export const registerUser: RequestHandler = async (req, res) => {
     error instanceof Prisma.PrismaClientKnownRequestError
       ? error.code === "P2002"
         ? res.status(400).json({
-          error: "A new user cannot be created with this email or username",
-        })
+            error: "A new user cannot be created with this email or username",
+          })
         : res.status(400).json({
-          error: `Prisma error: ${error.message}`,
-        })
+            error: `Prisma error: ${error.message}`,
+          })
       : res.status(400).json({
-        error: `Not Prisma Error: ${error}`,
-      });
+          error: `Not Prisma Error: ${error}`,
+        });
   }
 };
 
@@ -34,13 +34,14 @@ export const loginUser: RequestHandler = async (req, res) => {
   passport.authenticate("local", { session: false }, (error, user) => {
     error || !user
       ? res.status(400).json({
-        message: "Something is not right",
-      })
+          ...(error && { error: error }),
+          message: "Something is not right",
+        })
       : req.login(user, { session: false }, (err) => {
-        err
-          ? res.status(400).json(err)
-          : res.status(200).json({ user, token: createJwtToken(user) });
-      });
+          err
+            ? res.status(400).json(err)
+            : res.status(200).json({ user, token: createJwtToken(user) });
+        });
   })(req, res);
 };
 
@@ -49,6 +50,6 @@ export const loginUser: RequestHandler = async (req, res) => {
  */
 export const logoutUser: RequestHandler = (req, res) => {
   req.logout((err) => {
-    err ? res.status(200).json(err) : res.status(200).json("User logged out");
+    err ? res.status(400).json(err) : res.status(200).json("User logged out");
   });
 };
