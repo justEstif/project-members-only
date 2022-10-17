@@ -45,14 +45,14 @@ router.post("/login", validate(loginSchema), loginUser);
 
 /**
  * @desc Logout user
- * @route get /api/logout
+ * @route GET /api/logout
  * @access Public
  */
 router.get("/logout", logoutUser);
 
 /**
  * @desc Post a message
- * @route Post /api/message
+ * @route POST /api/message
  * @access Private: only logged in users
  */
 router.post(
@@ -89,9 +89,10 @@ router.get(
 
 /**
  * @desc Update a message
- * @route UPDATE /api/message/:id
+ * @route PUT /api/message/:id
  * @access Private
  */
+// NOTE the update function isn't working
 router.put(
   "/message/:id",
   [
@@ -115,7 +116,7 @@ router.delete(
 
 /**
  * @description Update user info
- * @route UPDATE /api/user/:id
+ * @route PUT /api/user/:id
  * @access Private; can only update your own account
  */
 router.put(

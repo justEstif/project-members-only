@@ -130,7 +130,7 @@ export const updateMessageForUser = async (
       };
     } catch (_error) {
       return {
-        message: "",
+        message: null,
         error: "Prisma error; couldn't update message",
       };
     }
