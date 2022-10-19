@@ -3,11 +3,11 @@ import { RequestHandler, Response } from "express";
 import { TRequest } from "../interface";
 import { TMessage } from "../schema/message.schema";
 import {
-  createMessageForUser,
-  deleteMessageForUser,
-  getMessageForUser,
-  getMessagesForUser,
-  updateMessageForUser,
+  createMessageService,
+  deleteMessageService,
+  getMessageService,
+  getMessagesService,
+  updateMessageService,
 } from "../service/message.service";
 
 /**
@@ -18,7 +18,7 @@ export const createMessage = async (
   req: TRequest<TMessage["body"], []>,
   res: Response
 ) => {
-  const { message, error } = await createMessageForUser(
+  const { message, error } = await createMessageService(
     req.user as User,
     req.body
   );
@@ -32,7 +32,7 @@ export const createMessage = async (
  * @return error is user is doesn't match
  */
 export const getMessages: RequestHandler = async (req, res) => {
-  const { error, messages } = await getMessagesForUser(req.user as User);
+  const { error, messages } = await getMessagesService(req.user as User);
   messages ? res.status(200).json(messages) : res.status(400).json(error);
 };
 
@@ -41,7 +41,7 @@ export const getMessages: RequestHandler = async (req, res) => {
  * @return message
  */
 export const getMessage: RequestHandler = async (req, res) => {
-  const { error, message } = await getMessageForUser(
+  const { error, message } = await getMessageService(
     req.user as User,
     req.params.id
   );
@@ -53,7 +53,7 @@ export const getMessage: RequestHandler = async (req, res) => {
  * @return message
  */
 export const updateMessage: RequestHandler = async (req, res) => {
-  const { message, error } = await updateMessageForUser(
+  const { message, error } = await updateMessageService(
     req.user as User,
     req.params.id,
     req.body
@@ -66,7 +66,7 @@ export const updateMessage: RequestHandler = async (req, res) => {
  * @return success message if deleted or error
  */
 export const deleteMessage: RequestHandler = async (req, res) => {
-  const { error, message } = await deleteMessageForUser(
+  const { error, message } = await deleteMessageService(
     req.user as User,
     req.params.id
   );

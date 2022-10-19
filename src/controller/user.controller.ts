@@ -2,7 +2,7 @@ import { User } from "@prisma/client";
 import { RequestHandler, Response } from "express";
 import { TRequest } from "../interface";
 import { TUpdateSchema } from "../schema/user.schema";
-import { deleteUserForUser, updateUserForUser } from "../service/user.service";
+import { deleteUserService, updateUserService } from "../service/user.service";
 
 /**
  * @description function to update user
@@ -11,7 +11,7 @@ export const updateUser = async (
   req: TRequest<TUpdateSchema["body"], { id: string }>,
   res: Response
 ) => {
-  const { user, error } = await updateUserForUser(
+  const { user, error } = await updateUserService(
     req.user as User,
     req.params.id,
     req.body
@@ -23,7 +23,7 @@ export const updateUser = async (
  * @description function to delete user
  */
 export const deleteUser: RequestHandler = async (req, res) => {
-  const { message, error } = await deleteUserForUser(
+  const { message, error } = await deleteUserService(
     req.user as User,
     req.params.id
   );
