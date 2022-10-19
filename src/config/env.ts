@@ -4,6 +4,7 @@ const envSchema = object({
   PORT: string().transform(Number),
   SALTWORKFACTOR: string().transform(Number),
   JWTSECRET: string(),
+  DATABASE_URL: string(),
 });
 
 const env = envSchema.safeParse(process.env);

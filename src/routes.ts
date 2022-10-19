@@ -50,7 +50,7 @@ router.post("/login", validate(loginSchema), loginUser);
 router.get("/logout", logoutUser);
 
 /**
- * @desc Create a message
+ * @desc Post a message
  * @route POST /api/message
  * @access Private: only logged in users
  */
