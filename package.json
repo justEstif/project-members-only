@@ -25,6 +25,7 @@
     "passport-anonymous": "^1.0.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "dotenv": "^16.0.3",
     "zod": "^3.19.1"
   },
   "devDependencies": {
@@ -37,7 +38,6 @@
     "@types/passport-local": "^1.0.34",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
-    "dotenv": "^16.0.3",
     "eslint": "^8.24.0",
     "nodemon": "^2.0.20",
     "prisma": "^4.4.0",
