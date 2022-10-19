@@ -1,7 +1,16 @@
 {
   "name": "backend",
+  "description": "the express server for member's only project.",
   "version": "1.0.0",
   "license": "MIT",
+  "keywords": [
+    "typescript",
+    "express",
+    "prisma",
+    "eslint",
+    "passport",
+    "zod"
+  ],
   "scripts": {
     "start": "ts-node --transpile-only ./src/server.ts",
     "dev": "nodemon"
