@@ -1,5 +1,6 @@
 import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
+import { Strategy as AnonymousStrategy } from "passport-anonymous";
 import prisma from "../config/prisma";
 import bcrypt from "bcryptjs";
 import env from "./env";
@@ -48,3 +49,5 @@ export const jwtStrategy = new JwtStrategy(
     return user ? cb(null, omitFromUser(user, "password")) : cb(false);
   }
 );
+
+export const anonStrategy = new AnonymousStrategy();

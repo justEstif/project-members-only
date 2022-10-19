@@ -1,7 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
 import validate from "./middleware/validate";
-import requireUser from "./middleware/requireUser";
 import { loginSchema, registerSchema } from "./schema/authentication.schema";
 import {
   loginUser,
@@ -51,17 +50,13 @@ router.post("/login", validate(loginSchema), loginUser);
 router.get("/logout", logoutUser);
 
 /**
- * @desc Post a message
+ * @desc Create a message
  * @route POST /api/message
  * @access Private: only logged in users
  */
 router.post(
   "/message",
-  [
-    passport.authenticate("jwt", { session: false }),
-    requireUser,
-    validate(messageSchema),
-  ],
+  [passport.authenticate("jwt", { session: false }), validate(messageSchema)],
   createMessage
 );
 
@@ -72,7 +67,7 @@ router.post(
  */
 router.get(
   "/message/",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate(["jwt", "anonymous"], { session: false }),
   getMessages
 );
 
@@ -83,7 +78,7 @@ router.get(
  */
 router.get(
   "/message/:id",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate(["jwt", "anonymous"], { session: false }),
   getMessage
 );
 
@@ -95,11 +90,8 @@ router.get(
 // NOTE the update function isn't working
 router.put(
   "/message/:id",
-  [
-    passport.authenticate("jwt", { session: false }),
-    requireUser,
-    validate(messageSchema),
-  ],
+  passport.authenticate("jwt", { session: false }),
+  validate(messageSchema),
   updateMessage
 );
 
@@ -110,7 +102,7 @@ router.put(
  */
 router.delete(
   "/message/:id",
-  [passport.authenticate("jwt", { session: false }), requireUser],
+  passport.authenticate("jwt", { session: false }),
   deleteMessage
 );
 
@@ -121,11 +113,8 @@ router.delete(
  */
 router.put(
   "/user/:id",
-  [
-    passport.authenticate("jwt", { session: false }),
-    requireUser,
-    validate(registerSchema),
-  ],
+  passport.authenticate("jwt", { session: false }),
+  validate(registerSchema),
   updateUser
 );
 
@@ -136,7 +125,7 @@ router.put(
  */
 router.delete(
   "/user/:id",
-  [passport.authenticate("jwt", { session: false }), requireUser],
+  passport.authenticate("jwt", { session: false }),
   deleteUser
 );
 
