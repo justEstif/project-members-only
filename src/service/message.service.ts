@@ -5,43 +5,37 @@ import prisma from "../config/prisma";
 
 /**
  * @description function to create a message
+ * @param currentUser: the current user
  */
-export const createMessageForUser = async (
-  currentUser: User | undefined,
+export const createMessageService = async (
+  currentUser: User,
   messageText: TMessage["body"]
 ) => {
-  if (!currentUser) {
+  const { id } = currentUser;
+
+  try {
+    const message = await prisma.message.create({
+      data: {
+        text: messageText.text,
+        userId: id,
+      },
+    });
+    return {
+      message,
+      error: null,
+    };
+  } catch (error) {
     return {
       message: null,
-      error: "No jwt token; couldn't create message",
+      error: "Prisma error; couldn't create message",
     };
-  } else {
-    const { id } = currentUser;
-
-    try {
-      const message = await prisma.message.create({
-        data: {
-          text: messageText.text,
-          userId: id,
-        },
-      });
-      return {
-        message,
-        error: null,
-      };
-    } catch (error) {
-      return {
-        message: null,
-        error: "Prisma error; couldn't create message",
-      };
-    }
   }
 };
 
 /**
  * @description function that gets the message
  */
-export const getMessagesForUser = async (currentUser: User | undefined) => {
+export const getMessagesService = async (currentUser: User | undefined) => {
   try {
     if (!currentUser || currentUser.role === "USER") {
       const messages = await prisma.message.findMany({}); // NOTE thi could be empty
@@ -73,7 +67,7 @@ export const getMessagesForUser = async (currentUser: User | undefined) => {
 /**
  * @description function to get a single message
  */
-export const getMessageForUser = async (
+export const getMessageService = async (
   currentUser: User | undefined,
   messageId: string
 ) => {
@@ -100,44 +94,38 @@ export const getMessageForUser = async (
 
 /**
  * @description function to update a message
+ * @param currentUser only available to logged in usess
  */
-export const updateMessageForUser = async (
-  currentUser: User | undefined,
+export const updateMessageService = async (
+  currentUser: User,
   messageId: string,
   updatedText: TMessage["body"]
 ) => {
-  if (currentUser) {
-    const { id } = currentUser;
-    try {
-      await prisma.message.updateMany({
-        where: {
-          AND: [
-            {
-              id: messageId,
-            },
-            {
-              userId: id,
-            },
-          ],
-        },
-        data: {
-          text: updatedText.text,
-        },
-      });
-      return {
-        message: "Updated message",
-        error: null,
-      };
-    } catch (_error) {
-      return {
-        message: null,
-        error: "Prisma error; couldn't update message",
-      };
-    }
-  } else {
+  const { id } = currentUser;
+  try {
+    await prisma.message.updateMany({
+      where: {
+        AND: [
+          {
+            id: messageId,
+          },
+          {
+            userId: id,
+          },
+        ],
+      },
+      data: {
+        text: updatedText.text,
+      },
+    });
+    return {
+      message: "Updated message",
+      error: null,
+    };
+  } catch (_error) {
     return {
       message: null,
-      error: "User error; couldn't update message",
+      error: "Prisma error; couldn't update message",
     };
   }
 };
@@ -145,34 +133,27 @@ export const updateMessageForUser = async (
 /**
  * @description function to delete a message
  */
-export const deleteMessageForUser = async (
-  currentUser: User | undefined,
+export const deleteMessageService = async (
+  currentUser: User,
   messageId: string
 ) => {
-  if (currentUser) {
-    const { id, role } = currentUser;
-    try {
-      role === "ADMIN"
-        ? await prisma.message.delete({
-            where: { id: messageId },
-          })
-        : await prisma.message.deleteMany({
-            where: { AND: [{ id: messageId }, { userId: id }] },
-          });
-      return {
-        message: "Deleted message",
-        error: null,
-      };
-    } catch (error) {
-      return {
-        message: null,
-        error: "Prisma error; couldn't delete message",
-      };
-    }
-  } else {
+  const { id, role } = currentUser;
+  try {
+    role === "ADMIN"
+      ? await prisma.message.delete({
+          where: { id: messageId },
+        })
+      : await prisma.message.deleteMany({
+          where: { AND: [{ id: messageId }, { userId: id }] },
+        });
+    return {
+      message: "Deleted message",
+      error: null,
+    };
+  } catch (error) {
     return {
       message: null,
-      error: "Auth error; couldn't delete message",
+      error: "Prisma error; couldn't delete message",
     };
   }
 };
