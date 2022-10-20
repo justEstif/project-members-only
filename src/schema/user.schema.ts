@@ -25,10 +25,16 @@ export const updateSchema = object({
     passwordConfirmation: string({
       required_error: "passwordConfirmation is required",
     }),
-  }).refine((data) => data.password === data.passwordConfirmation, {
-    message: "Passwords do not match",
-    path: ["passwordConfirmation"],
-  }),
+  })
+    .partial()
+    .refine((data) => data.password && data.passwordConfirmation, {
+      message: "both password and passwordConfirmation are required",
+      path: ["passwordConfirmation", "password"],
+    })
+    .refine((data) => data.password === data.passwordConfirmation, {
+      message: "Passwords do not match",
+      path: ["passwordConfirmation"],
+    }),
 });
 
 export type TUpdateSchema = TypeOf<typeof updateSchema>;
