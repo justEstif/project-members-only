@@ -50,4 +50,7 @@ export const jwtStrategy = new JwtStrategy(
   }
 );
 
+/**
+* @description allow auth to be optional
+*/
 export const anonStrategy = new AnonymousStrategy();
