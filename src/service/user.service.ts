@@ -13,20 +13,32 @@ export const updateUserService = async (
   updateUserId: string,
   updatedUserBody: TUpdateSchema["body"]
 ) => {
+  const getHashedPw = async (input: string) => {
+    const salt = await bcrypt.genSalt(env.SALTWORKFACTOR);
+    return bcrypt.hashSync(input, salt);
+  };
   if (updateUserId === currentUser.id) {
     try {
-      const salt = await bcrypt.genSalt(env.SALTWORKFACTOR);
-      const hashedPassword = bcrypt.hashSync(updatedUserBody.password, salt);
-
       const updatedUser = await prisma.user.update({
         where: {
           id: currentUser.id,
         },
         data: {
-          name: updatedUserBody.name,
-          userName: updatedUserBody.userName,
-          email: updatedUserBody.email,
-          password: hashedPassword,
+          ...(updatedUserBody.name && {
+            name: updatedUserBody.name,
+          }),
+
+          ...(updatedUserBody.userName && {
+            userName: updatedUserBody.userName,
+          }),
+
+          ...(updatedUserBody.email && {
+            email: updatedUserBody.email,
+          }),
+
+          ...(updatedUserBody.password && {
+            password: await getHashedPw(updatedUserBody.password),
+          }),
         },
       });
 
