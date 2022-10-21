@@ -9,8 +9,10 @@ import { createJwtToken, register } from "../service/authentication.service";
 export const registerUser: RequestHandler = async (req, res) => {
   try {
     const { user, token } = await register(req);
-    req.login(user, { session: false }, (err) => {
-      err ? res.status(400).json(err) : res.status(201).json({ user, token });
+    req.login(user, { session: false }, (error) => {
+      error
+        ? res.status(400).json({ error })
+        : res.status(201).json({ user, token });
     });
   } catch (error) {
     error instanceof Prisma.PrismaClientKnownRequestError
@@ -22,7 +24,7 @@ export const registerUser: RequestHandler = async (req, res) => {
             error: `Prisma error: ${error.message}`,
           })
       : res.status(400).json({
-          error: `Not Prisma Error: ${error}`,
+          error: `Error: ${JSON.stringify(error)}`,
         });
   }
 };
@@ -34,12 +36,12 @@ export const loginUser: RequestHandler = async (req, res) => {
   passport.authenticate("local", { session: false }, (error, user) => {
     error || !user
       ? res.status(400).json({
-          ...(error && { error: error }),
+          ...(error && { error: JSON.stringify(error) }),
           message: "Something is not right",
         })
-      : req.login(user, { session: false }, (err) => {
-          err
-            ? res.status(400).json(err)
+      : req.login(user, { session: false }, (error) => {
+          error
+            ? res.status(400).json(JSON.stringify(error))
             : res.status(200).json({ user, token: createJwtToken(user) });
         });
   })(req, res);
@@ -49,7 +51,9 @@ export const loginUser: RequestHandler = async (req, res) => {
  * @description function to logout user
  */
 export const logoutUser: RequestHandler = (req, res) => {
-  req.logout((err) => {
-    err ? res.status(400).json(err) : res.status(200).json("User logged out");
+  req.logout((error) => {
+    error
+      ? res.status(400).json(JSON.stringify(error))
+      : res.status(200).json("User logged out");
   });
 };
