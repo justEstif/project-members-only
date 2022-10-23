@@ -35,13 +35,10 @@ export const registerUser: RequestHandler = async (req, res) => {
 export const loginUser: RequestHandler = async (req, res) => {
   passport.authenticate("local", { session: false }, (error, user) => {
     error || !user
-      ? res.status(400).json({
-          ...(error && { error: JSON.stringify(error) }),
-          message: "Something is not right",
-        })
+      ? res.status(400).json({ error: "Login Error" })
       : req.login(user, { session: false }, (error) => {
           error
-            ? res.status(400).json(JSON.stringify(error))
+            ? res.status(400).json({ error: "Login Error" })
             : res.status(200).json({ user, token: createJwtToken(user) });
         });
   })(req, res);
