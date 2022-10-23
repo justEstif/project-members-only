@@ -51,9 +51,11 @@ export const loginUser: RequestHandler = async (req, res) => {
  * @description function to logout user
  */
 export const logoutUser: RequestHandler = (req, res) => {
-  req.logout((error) => {
-    error
-      ? res.status(400).json(JSON.stringify(error))
-      : res.status(200).json("User logged out");
-  });
+  req.isAuthenticated()
+    ? req.logout((error) => {
+        error
+          ? res.status(400).json(JSON.stringify(error))
+          : res.status(200).json("User logged out");
+      })
+    : res.status(200).json("User logged out");
 };
