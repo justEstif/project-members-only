@@ -10,15 +10,12 @@ import { object, string, TypeOf } from "zod";
  */
 export const updateSchema = object({
   body: object({
-    name: string({}),
-    userName: string({}),
-    email: string({}).email("Not a valid email"),
-    password: string({}).min(
-      6,
-      "Password too short - should be 6 chars minimum"
-    ),
-    passwordConfirmation: string({}),
-    secretKey: string({}),
+    name: string(),
+    userName: string(),
+    email: string().email("Not a valid email"),
+    password: string().min(6, "Password too short - should be 6 chars minimum"),
+    passwordConfirmation: string(),
+    secretKey: string(),
   })
     .partial()
     .refine((data) => data.password && data.passwordConfirmation, {
