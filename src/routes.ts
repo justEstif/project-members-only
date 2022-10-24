@@ -16,6 +16,7 @@ import {
 } from "./controller/message.controller";
 import { messageSchema } from "./schema/message.schema";
 import { deleteUser, updateUser } from "./controller/user.controller";
+import { updateSchema } from "./schema/user.schema";
 
 const router = Router();
 
@@ -114,7 +115,7 @@ router.delete(
 router.put(
   "/user/:id",
   passport.authenticate("jwt", { session: false }),
-  validate(registerSchema),
+  validate(updateSchema),
   updateUser
 );
 
