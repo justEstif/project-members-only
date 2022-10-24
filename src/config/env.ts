@@ -1,13 +1,15 @@
 import { object, string } from "zod";
-import * as dotenv from 'dotenv'
+import * as dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 const envSchema = object({
   PORT: string().transform(Number),
   SALTWORKFACTOR: string().transform(Number),
   JWTSECRET: string(),
   DATABASE_URL: string(),
+  MEMBER_KEY: string(),
+  ADMIN_KEY: string(),
 });
 
 const env = envSchema.safeParse(process.env);
