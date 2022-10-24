@@ -18,7 +18,7 @@ export const updateSchema = object({
     secretKey: string(),
   })
     .partial()
-    .refine((data) => data.password && data.passwordConfirmation, {
+    .refine((data) => !data.password && !data.passwordConfirmation, {
       message: "both password and passwordConfirmation are required",
       path: ["passwordConfirmation", "password"],
     })
