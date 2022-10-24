@@ -39,6 +39,16 @@ export const updateUserService = async (
           ...(updatedUserBody.password && {
             password: await getHashedPw(updatedUserBody.password),
           }),
+
+          ...(updatedUserBody.secretKey &&
+            updatedUserBody.secretKey === env.MEMBER_KEY && {
+              role: "MEMBER",
+            }),
+
+          ...(updatedUserBody.secretKey &&
+            updatedUserBody.secretKey === env.ADMIN_KEY && {
+              role: "ADMIN",
+            }),
         },
       });
 
