@@ -38,7 +38,11 @@ export const createMessageService = async (
 export const getMessagesService = async (currentUser: User | undefined) => {
   try {
     if (!currentUser || currentUser.role === "USER") {
-      const messages = await prisma.message.findMany({}); // NOTE thi could be empty
+      const messages = await prisma.message.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
       return {
         messages: messages.map((message) => omitFromMessage(message, "userId")),
         error: null,
@@ -53,6 +57,7 @@ export const getMessagesService = async (currentUser: User | undefined) => {
             },
           },
         },
+        orderBy: { createdAt: "desc" },
       });
       return { messages, error: null };
     }
