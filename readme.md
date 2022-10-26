@@ -22,3 +22,6 @@
 - zod for request validation
 - a strong grasp on user authentication and role restriction
 
+## Site
+
+- Check backend health: <https://members-only-85me.onrender.com/api/checkhealth>
