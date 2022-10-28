@@ -1,9 +1,18 @@
 import express, { urlencoded, json } from "express";
+import cors from "cors";
 import passport from "passport";
 import { anonStrategy, jwtStrategy, localStrategy } from "./config/passport";
 import router from "./routes";
 
 const app = express();
+
+// cors
+app.use(
+  cors({
+    origin: "https://members-only-client.onrender.com/",
+    optionsSuccessStatus: 200,
+  })
+);
 
 // body parser
 app.use(json());
