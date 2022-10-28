@@ -13,7 +13,8 @@
   ],
   "scripts": {
     "build": "npm i",
-    "start": "nodemon",
+    "postinstall": "tsc",
+    "start": "node dist/server.js",
     "dev": "nodemon"
   },
   "dependencies": {
