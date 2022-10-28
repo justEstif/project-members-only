@@ -11,21 +11,17 @@ export const registerUser: RequestHandler = async (req, res) => {
     const { user, token } = await register(req);
     req.login(user, { session: false }, (error) => {
       error
-        ? res.status(400).json({ error })
+        ? res.status(400).json(error)
         : res.status(201).json({ user, token });
     });
   } catch (error) {
     error instanceof Prisma.PrismaClientKnownRequestError
       ? error.code === "P2002"
-        ? res.status(400).json({
-            error: "A new user cannot be created with this email or username",
-          })
-        : res.status(400).json({
-            error: `Prisma error: ${error.message}`,
-          })
-      : res.status(400).json({
-          error: `Error: ${JSON.stringify(error)}`,
-        });
+        ? res
+            .status(400)
+            .json("A new user cannot be created with this email or username")
+        : res.status(400).json(`${error.message}`)
+      : res.status(400).json(`${JSON.stringify(error)}`);
   }
 };
 
@@ -35,10 +31,10 @@ export const registerUser: RequestHandler = async (req, res) => {
 export const loginUser: RequestHandler = async (req, res) => {
   passport.authenticate("local", { session: false }, (error, user) => {
     error || !user
-      ? res.status(400).json({ error: "Login Error" })
+      ? res.status(400).json("Login Error")
       : req.login(user, { session: false }, (error) => {
           error
-            ? res.status(400).json({ error: "Login Error" })
+            ? res.status(400).json("Login Error")
             : res.status(200).json({ user, token: createJwtToken(user) });
         });
   })(req, res);

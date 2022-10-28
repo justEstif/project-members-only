@@ -12,9 +12,8 @@
     "zod"
   ],
   "scripts": {
-    "build": "npm i; tsc",
-    "start": "node dist/server.js",
-    "postinstall": "tsc",
+    "build": "npm i",
+    "start": "nodemon",
     "dev": "nodemon"
   },
   "dependencies": {
