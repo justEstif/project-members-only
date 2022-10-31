@@ -7,12 +7,7 @@ import router from "./routes";
 const app = express();
 
 // cors
-app.use(
-  cors({
-    origin: "https://members-only-client.onrender.com/",
-    optionsSuccessStatus: 200,
-  })
-);
+app.use(cors());
 
 // body parser
 app.use(json());
