@@ -64,7 +64,7 @@ export const getMessagesService = async (currentUser: User | undefined) => {
   } catch (error) {
     return {
       messages: null,
-      error: "Prisma error; couldn't get messages",
+      error: "Couldn't get messages",
     };
   }
 };
