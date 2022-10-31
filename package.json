@@ -12,8 +12,8 @@
     "zod"
   ],
   "scripts": {
-    "build": "npm i",
-    "postinstall": "tsc",
+    "build": "yarn migrate && tsc",
+    "migrate": "prisma migrate deploy",
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts"
   },
