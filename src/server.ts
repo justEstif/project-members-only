@@ -4,5 +4,5 @@ import env from "./config/env";
 const port = env.PORT;
 
 app.listen(port, () => {
-  console.log(`express listening at http://localhost:${port}/api`);
+  console.log(`express listening at http://localhost:${port}`);
 });

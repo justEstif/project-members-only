@@ -19,7 +19,7 @@ passport.use(jwtStrategy);
 passport.use(anonStrategy);
 
 app.use(passport.initialize());
-app.use("/api", router);
+app.use("/", router);
 
 // TODO add error handler middleware
 
